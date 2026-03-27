@@ -1,6 +1,7 @@
 import { items } from "./items.js";
 const addBtn = document.getElementById("new-item-btn");
 const cancelBtn = document.getElementById("cancel-btn");
+const closeCardBtn = document.getElementById("card-close");
 const inventoryTable = document.getElementById("inventory-tbody");
 const itemForm = document.getElementById("item-form");
 const nameInput = document.getElementById("item-name");
@@ -9,6 +10,7 @@ const sizeInput = document.getElementById("item-size");
 const nameTableHead = document.getElementById("th-name");
 const categortyTableHead = document.getElementById("th-category");
 const lengthTableHead = document.getElementById("th-length");
+const itemCard = document.getElementById("item-card");
 
 let currentSortField = null;
 let currentSortDirection = "asc";
@@ -16,19 +18,14 @@ let currentSortDirection = "asc";
 function addRow(name, category, size) {
 	const newRow = document.createElement("tr");
 
-	const nameCell = document.createElement("td");
-	nameCell.textContent = name;
-
-	const categoryCell = document.createElement("td");
-	categoryCell.textContent = category;
-
-	const sizeCell = document.createElement("td");
-	sizeCell.textContent = Number(size);
-
-	newRow.appendChild(nameCell);
-	newRow.appendChild(categoryCell);
-	newRow.appendChild(sizeCell);
-
+	newRow.innerHTML = `
+        <td>${name}</td>
+        <td>${category}</td>
+        <td>${Number(size)}</td>
+    `;
+	newRow.addEventListener("click", () =>
+		showItemDetails(name, category, size),
+	);
 	inventoryTable.appendChild(newRow);
 }
 function renderTable() {
@@ -42,6 +39,19 @@ function showItemForm() {
 function hideItemForm() {
 	itemForm.reset();
 	document.getElementById("form-container").classList.add("hidden");
+}
+
+function showItemDetails(name, category, length) {
+	document.getElementById("card-name").textContent = `megnevezés: ${name}`;
+	document.getElementById("card-category").textContent =
+		`kategória: ${category}`;
+	document.getElementById("card-length").textContent =
+		`hossz (mm): ${length}`;
+
+	itemCard.classList.remove("hidden");
+}
+function closeItemDetails() {
+	itemCard.classList.add("hidden");
 }
 
 function sortBy(field) {
@@ -70,6 +80,7 @@ function sortBy(field) {
 
 addBtn.addEventListener("click", showItemForm);
 cancelBtn.addEventListener("click", hideItemForm);
+closeCardBtn.addEventListener("click", closeItemDetails);
 nameTableHead.addEventListener("click", () => sortBy("name"));
 categortyTableHead.addEventListener("click", () => sortBy("category"));
 lengthTableHead.addEventListener("click", () => sortBy("length"));
