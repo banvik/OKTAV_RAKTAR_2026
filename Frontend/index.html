@@ -1,57 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Termékek</title>
-</head>
-<body>
-    <div class="nav">
-        <a href="./index.html">készlet</a>
-        <a href="./warehouses.html">raktárak</a>
-        <a href="./transactions.html">tranzakciók</a>
-    </div>
-    <div>
-        <div class="inventory-container">
-            <h1>készlet</h1>
-            <button id="new-item-btn">új tárgy felvétele</button>
-            <table >
-                <thead>
-                    <tr>
-                        <th id="th-name">Terméknév</th>
-                        <th id="th-category">Kategória</th>
-                        <th id="th-length">Hossz(mm)</th>
-                    </tr>
-                </thead>
-                <tbody id="inventory-tbody">                    
-                </tbody>
-                
-            </table>
-            <div id="form-container" class="hidden">
-                <form id="item-form">
-                    <label>
-                        Név:
-                        <input type="text" id="item-name" required>
-                    </label>
-                    <label>
-                        Kategória:
-                        <input type="text" id="item-category" required>
-                    </label>
-                    <label>
-                        Hossz (mm):
-                        <input type="number" id="item-size" required>
-                    </label>
-                    <div class="form-btn-cont">
-                        <button id="submit-btn" type="submit">tárgy hozzáadása</button>
-                        <button id="cancel-btn" type="button">mégse</button>
-                    </div>
-                    
-                </form>
-            </div>            
-        </div>        
-
-    </div>
-    <script type="module" src="script.js"></script>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="styles.css" />
+		<title>Termékek</title>
+	</head>
+	<body>
+		<div class="nav">
+			<a href="./index.html">készlet</a>
+			<a href="./warehouses.html">raktárak</a>
+			<a href="./transactions.html">tranzakciók</a>
+		</div>
+		<div>
+			<div class="inventory-container">
+				<h1>készlet</h1>
+				<button id="new-item-btn">új tárgy felvétele</button>
+				<table>
+					<thead>
+						<tr>
+							<th id="th-name">Terméknév</th>
+							<th id="th-category">Kategória</th>
+							<th id="th-length">Hossz(mm)</th>
+						</tr>
+					</thead>
+					<tbody id="inventory-tbody"></tbody>
+				</table>
+				<div id="form-container" class="hidden">
+					<form id="item-form">
+						<label>
+							Név:
+							<input type="text" id="item-name" required />
+						</label>
+						<label>
+							Kategória:
+							<input type="text" id="item-category" required />
+						</label>
+						<label>
+							Hossz (mm):
+							<input type="number" id="item-size" required />
+						</label>
+						<div class="form-btn-cont">
+							<button id="submit-btn" type="submit">
+								tárgy hozzáadása
+							</button>
+							<button id="cancel-btn" type="button">mégse</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script type="module" src="script.js"></script>
+	</body>
 </html>
