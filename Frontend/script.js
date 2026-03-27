@@ -7,6 +7,12 @@ const nameInput = document.getElementById("item-name")
 const categoryInput = document.getElementById("item-category")
 const sizeInput = document.getElementById("item-size")
 const nameTableHead = document.getElementById("th-name")
+const categortyTableHead = document.getElementById("th-category")
+const lengthTableHead = document.getElementById("th-length")
+
+let currentSortField = null;
+let currentSortDirection = "asc";
+
 
 
 function addRow(name, category, size) {
@@ -19,7 +25,7 @@ function addRow(name, category, size) {
     categoryCell.textContent = category;
 
     const sizeCell = document.createElement("td");
-    sizeCell.textContent = size;
+    sizeCell.textContent = Number(size);
 
     newRow.appendChild(nameCell);
     newRow.appendChild(categoryCell);
@@ -40,14 +46,37 @@ function hideItemForm() {
     document.getElementById("form-container").classList.add("hidden")
 }
 
-function sortByName() {
-    items.sort((a,b) => a.name.localeCompare(b.name))
+function sortBy(field) {
+    if(currentSortField === field){
+        currentSortDirection = currentSortDirection === "asc" ? "desc" : "asc"
+    }
+    else {
+        currentSortField = field
+        currentSortDirection = "asc"
+    }
+    items.sort((a,b) => {
+        const itemA = a[field]
+        const itemB = b[field]
+
+        let result
+
+        if(typeof itemA === "string"){
+            result = itemA.localeCompare(itemB)
+        }
+        else {
+            result = itemA - itemB
+        }
+
+        return currentSortDirection === "asc" ? result : -result
+    })
     renderTable()
 }
 
 addBtn.addEventListener("click", showItemForm)
 cancelBtn.addEventListener("click", hideItemForm)
-nameTableHead.addEventListener("click", sortByName)
+nameTableHead.addEventListener("click", () =>sortBy("name"))
+categortyTableHead.addEventListener("click", () =>sortBy("category"))
+lengthTableHead.addEventListener("click", () =>sortBy("length"))
 itemForm.addEventListener("submit", (e)=> {
     e.preventDefault()
     items.push({name: nameInput.value, category: categoryInput.value, length: sizeInput.value })

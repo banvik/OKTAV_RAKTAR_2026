@@ -2,16 +2,21 @@ export const items = [
     {
         name: "Léc",
         category: "Faanyag",
-        length: "1000"
+        length: 1000
+    },
+    {
+        name: "Kalapács",
+        category: "Szerszám",
+        length: 150
     },
     {
         name: "Deszka",
         category: "Faanyag",
-        length: "200"
+        length: 200
     },
 {
         name: "Szeg",
-        category: "Szeg",
-        length: "100"
+        category: "Rögzítőeszköz",
+        length: 100
     },
 ]
