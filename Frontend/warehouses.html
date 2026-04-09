@@ -15,7 +15,19 @@
 		</div>
 		<div>
 			<h1>Raktárak</h1>
+			<select id="warehouse-select">
+		<option value="">-- válassz raktárat --</option>
+	</select>
+	<table>
+		<thead>
+			<tr>
+				<th>Termék</th>
+				<th>Típus</th>
+				<th>Mennyiség</th>
+			</tr>
+		</thead>
+		<tbody id="stock-table"></tbody>
 		</div>
-		<script src="script.js"></script>
+		<script type="module" src="warehouseScripts.js"></script>
 	</body>
 </html>

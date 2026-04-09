@@ -3,19 +3,30 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+			crossorigin="anonymous"
+		/>
 		<link rel="stylesheet" href="styles.css" />
 		<title>Termékek</title>
 	</head>
 	<body>
 		<div class="nav">
-			<a href="./index.html">készlet</a>
+			<a href="./index.html">Termékek</a>
 			<a href="./warehouses.html">raktárak</a>
 			<a href="./transactions.html">tranzakciók</a>
 		</div>
 		<div>
 			<div class="inventory-container">
-				<h1>készlet</h1>
-				<button id="new-item-btn">új tárgy felvétele</button>
+				<h1>Termékek</h1>
+				<button id="new-item-btn" class="btn btn-primary">
+					új tárgy felvétele
+				</button>
+				<button id="test-btn" class="btn btn-secondary">
+					teszt tárgy felvétele
+				</button>
 				<table>
 					<thead>
 						<tr>
