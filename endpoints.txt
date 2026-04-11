@@ -1,11 +1,6 @@
-<?php
-	if (!empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS'])) {
-		$uri = 'https://';
-	} else {
-		$uri = 'http://';
-	}
-	$uri .= $_SERVER['HTTP_HOST'];
-	header('Location: '.$uri.'/dashboard/');
-	exit;
-?>
-Something is wrong with the XAMPP installation :-(
+[GET]
+	http://localhost:8080/api/stock		// Ez lesz a raktárkészlet listázáshoz kombinálva a Products mezőivel
+	http://localhost:8080/api/products
+	http://localhost:8080/api/categories
+	http://localhost:8080/api/warehouses
+	http://localhost:8080/api/statuses
