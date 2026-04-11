@@ -1,0 +1,6 @@
+[GET]
+	http://localhost:8080/api/stock		// Ez lesz a raktárkészlet listázáshoz kombinálva a Products mezőivel
+	http://localhost:8080/api/products
+	http://localhost:8080/api/categories
+	http://localhost:8080/api/warehouses
+	http://localhost:8080/api/statuses
