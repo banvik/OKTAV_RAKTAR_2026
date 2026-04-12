@@ -7,6 +7,7 @@ import com.oktavprojekt.raktar.adatok.Warehouse;
 import com.oktavprojekt.raktar.adatok.Category;
 import com.oktavprojekt.raktar.adatok.Status;
 import com.oktavprojekt.raktar.adatok.Stock;
+import com.oktavprojekt.raktar.adatok.Operation;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,5 +45,11 @@ public class Controller {
     public Stock getStock() {
 
         return new Stock(); // A Spring Boot automatikusan átalakítja JSON-ná!
+    }
+
+    @GetMapping("/operation")
+    public Operation getOperation() {
+
+        return new Operation(); // A Spring Boot automatikusan átalakítja JSON-ná!
     }
 }
