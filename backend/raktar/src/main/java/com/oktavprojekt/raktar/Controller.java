@@ -47,7 +47,7 @@ public class Controller {
         return new Stock(); // A Spring Boot automatikusan átalakítja JSON-ná!
     }
 
-    @GetMapping("/operation")
+    @GetMapping("/operations")
     public Operation getOperation() {
 
         return new Operation(); // A Spring Boot automatikusan átalakítja JSON-ná!
