@@ -24,11 +24,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer product_id;
 
-    private String product_name         = "Polikarbonát üregkamrás 10mm";
-    private Integer category_id         = 1;
-    private String product_color        = "Víztiszta";
-    private String product_color_code   = "#F0F8FF";
-    private String product_size         = "2100x6000";
-    private String product_info         = "UV védett, többkamrás";
+    private String product_name;
+    private Integer category_id;
+    private String product_color;
+    private String product_color_code;
+    private String product_size;
+    private String product_info;
    
 }
