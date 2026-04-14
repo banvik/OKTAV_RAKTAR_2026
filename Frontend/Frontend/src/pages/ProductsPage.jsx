@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 export default function ProductsPage() {
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([]);
+	const [editingId, setEditingId] = useState(null);
     const [name, setName] = useState()
     const [category, setCategory] = useState()
     const [size, setSize] = useState()
@@ -26,30 +27,69 @@ export default function ProductsPage() {
 	};
 
     function handleSubmit(e) {
-        e.preventDefault();
+		e.preventDefault();
 
-		const newProduct = {
+		const productData = {
 			productName: name,
 			categoryId: category,
 			productSize: size,
 		};
 
-		fetch("http://localhost:8080/api/products", {
-			method: "POST",
+		const url = editingId
+			? `http://localhost:8080/api/products/${editingId}`
+			: "http://localhost:8080/api/products";
+
+		const method = editingId ? "PUT" : "POST";
+
+		fetch(url, {
+			method,
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(newProduct),
+			body: JSON.stringify(productData),
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				setProducts((prev) => [...prev, data]);
-				setIsOpen(false);
-				setName("");
-				setCategory("");
-				setSize("");
-			})
-			.catch((err) => console.error(err));
+				if (editingId) {
+					setProducts((prev) =>
+						prev.map((p) => (p.productId === editingId ? data : p)),
+					);
+				} else {
+					setProducts((prev) => [...prev, data]);
+				}
+
+				handleClose()
+			});
+	}
+
+	function handleDelete(id) {
+		fetch(`http://localhost:8080/api/products/${id}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+		.then(() => {
+			setProducts((prev) => prev.filter((p) => p.productId !== id));
+		});
+	}
+	function handleEdit(id) {
+		fetch(`http://localhost:8080/api/products/${id}`)
+			.then((res) => res.json())
+			.then((data) => {
+				setName(data.productName);
+				setCategory(data.categoryId);
+				setSize(data.productSize);
+				setEditingId(id);
+				setIsOpen(true);
+			});
+	}
+	function handleClose() {
+		setName("");
+		setCategory("");
+		setSize("");
+		setEditingId("");
+		setIsOpen(false);
 	}
     return (
 		<div>
@@ -67,6 +107,7 @@ export default function ProductsPage() {
 							<th>Terméknév</th>
 							<th>Kategória</th>
 							<th>Méret</th>
+							<th>Műveletek</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -78,6 +119,22 @@ export default function ProductsPage() {
 										{getCategoryName(product.categoryId)}
 									</td>
 									<td>{product.productSize}</td>
+									<td>
+										<button
+											onClick={() =>
+												handleDelete(product.productId)
+											}
+										>
+											törlés
+										</button>
+										<button
+											onClick={() =>
+												handleEdit(product.productId)
+											}
+										>
+											módosítás
+										</button>
+									</td>
 								</tr>
 							);
 						})}
@@ -127,12 +184,9 @@ export default function ProductsPage() {
 							</label>
 							<div className="form-btn-cont">
 								<button type="submit">
-									tárgy hozzáadása
+									{editingId ? "módosít" : "hozzáad"}
 								</button>
-								<button
-									type="button"
-									onClick={() => setIsOpen(false)}
-								>
+								<button type="button" onClick={handleClose}>
 									mégse
 								</button>
 							</div>

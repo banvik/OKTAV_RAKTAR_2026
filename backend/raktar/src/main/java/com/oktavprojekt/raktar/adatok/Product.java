@@ -11,14 +11,14 @@ import lombok.Setter;
 @Table(name = "products") // Megegyezik az adatbázisbeli táblanévvel.
 @NoArgsConstructor // Kell a JPA-nak egy üres konstruktor.
 @AllArgsConstructor // Jó a teszteléshez.
-@Data
 @Getter
 @Setter
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer product_id;
+    @Column(name = "product_id")
+    private Integer productId;
 
     @Column(name = "product_name")
     private String productName;
