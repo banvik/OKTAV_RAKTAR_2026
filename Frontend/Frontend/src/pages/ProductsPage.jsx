@@ -26,6 +26,8 @@ export default function ProductsPage() {
 	};
 
     function handleSubmit() {
+        e.preventDefault();
+
 		const newProduct = {
 			product_name: name,
 			category_id: category,
@@ -72,7 +74,9 @@ export default function ProductsPage() {
 							return (
 								<tr key={i}>
 									<td>{product.product_name}</td>
-									<td>{getCategoryName(product.category_id)}</td>
+									<td>
+										{getCategoryName(product.category_id)}
+									</td>
 									<td>{product.product_size}</td>
 								</tr>
 							);
@@ -81,7 +85,7 @@ export default function ProductsPage() {
 				</table>
 				{isOpen && (
 					<div className="">
-						<form id="item-form">
+						<form id="item-form" onSubmit={handleSubmit}>
 							<label>
 								Név:
 								<input
@@ -122,7 +126,7 @@ export default function ProductsPage() {
 								/>
 							</label>
 							<div className="form-btn-cont">
-								<button type="button" onClick={handleSubmit}>
+								<button type="submit">
 									tárgy hozzáadása
 								</button>
 								<button
