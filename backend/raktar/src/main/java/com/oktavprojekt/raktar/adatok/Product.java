@@ -1,10 +1,6 @@
 package com.oktavprojekt.raktar.adatok;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -24,11 +20,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer product_id;
 
-    private String product_name;
-    private Integer category_id;
-    private String product_color;
-    private String product_color_code;
-    private String product_size;
-    private String product_info;
+    @Column(name = "product_name")
+    private String productName;
+
+    @Column(name = "category_id")
+    private Integer categoryId;
+
+    @Column(name = "product_color")
+    private String productColor;
+
+    @Column(name = "product_color_code")
+    private String productColorCode;
+
+    @Column(name = "product_size")
+    private String productSize;
+
+    @Column(name = "product_info")
+    private String productInfo;
    
 }

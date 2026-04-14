@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,13 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer category_id;
+    @Column(name = "category_id")
+    private Integer categoryId;
 
-    private String category_name ;
-    private String category_unit ;
+    @Column(name = "category_name")
+    private String categoryName;
+
+    @Column(name = "category_unit")
+    private String categoryUnit;
 
 }

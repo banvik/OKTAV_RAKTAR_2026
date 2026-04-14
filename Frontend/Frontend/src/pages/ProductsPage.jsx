@@ -21,17 +21,17 @@ export default function ProductsPage() {
 	}, []);
 
     const getCategoryName = (id) => {
-		const cat = categories.find((c) => c.category_id === id);
-		return cat ? cat.category_name : "Unknown";
+		const cat = categories.find((c) => c.categoryId === id);
+		return cat ? cat.categoryName : "Unknown";
 	};
 
-    function handleSubmit() {
+    function handleSubmit(e) {
         e.preventDefault();
 
 		const newProduct = {
-			product_name: name,
-			category_id: category,
-			product_size: size,
+			productName: name,
+			categoryId: category,
+			productSize: size,
 		};
 
 		fetch("http://localhost:8080/api/products", {
@@ -73,11 +73,11 @@ export default function ProductsPage() {
 						{products.map((product, i) => {
 							return (
 								<tr key={i}>
-									<td>{product.product_name}</td>
+									<td>{product.productName}</td>
 									<td>
-										{getCategoryName(product.category_id)}
+										{getCategoryName(product.categoryId)}
 									</td>
-									<td>{product.product_size}</td>
+									<td>{product.productSize}</td>
 								</tr>
 							);
 						})}
@@ -108,10 +108,10 @@ export default function ProductsPage() {
 
 									{categories.map((cat) => (
 										<option
-											key={cat.category_id}
-											value={cat.category_id}
+											key={cat.categoryId}
+											value={cat.categoryId}
 										>
-											{cat.category_name}
+											{cat.categoryName}
 										</option>
 									))}
 								</select>
