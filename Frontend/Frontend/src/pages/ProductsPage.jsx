@@ -99,8 +99,11 @@ export default function ProductsPage() {
 					onClick={() => setIsOpen(true)}
 					className="btn btn-primary"
 				>
-					új tárgy felvétele
+					Új tárgy felvétele
 				</button>
+				<div className="table-wrapper">
+					
+				</div>
 				<table>
 					<thead>
 						<tr>
@@ -122,17 +125,17 @@ export default function ProductsPage() {
 									<td>
 										<button
 											onClick={() =>
-												handleDelete(product.productId)
-											}
-										>
-											törlés
-										</button>
-										<button
-											onClick={() =>
 												handleEdit(product.productId)
 											}
 										>
-											módosítás
+											Módosítás
+										</button>
+										<button
+											onClick={() =>
+												handleDelete(product.productId)
+											}
+										>
+											Törlés
 										</button>
 									</td>
 								</tr>
@@ -141,56 +144,69 @@ export default function ProductsPage() {
 					</tbody>
 				</table>
 				{isOpen && (
-					<div className="">
-						<form id="item-form" onSubmit={handleSubmit}>
-							<label>
-								Név:
-								<input
-									type="text"
-									value={name}
-									onChange={(e) => setName(e.target.value)}
-									required
-								/>
-							</label>
-							<label>
-								Kategória:
-								<select
-									value={category}
-									onChange={(e) =>
-										setCategory(e.target.value)
-									}
-									required
-								>
-									<option value="">Válassz kategóriát</option>
+					<div className="modal-overlay" onClick={handleClose}>
+						<div
+							className="modal"
+							onClick={(e) => e.stopPropagation()}
+						>
+							<form id="item-form" onSubmit={handleSubmit}>
+								<label>
+									Név:
+									<input
+										type="text"
+										value={name}
+										onChange={(e) =>
+											setName(e.target.value)
+										}
+										required
+									/>
+								</label>
 
-									{categories.map((cat) => (
-										<option
-											key={cat.categoryId}
-											value={cat.categoryId}
-										>
-											{cat.categoryName}
+								<label>
+									Kategória:
+									<select
+										value={category}
+										onChange={(e) =>
+											setCategory(e.target.value)
+										}
+										required
+									>
+										<option value="">
+											Válassz kategóriát
 										</option>
-									))}
-								</select>
-							</label>
-							<label>
-								Hossz (mm):
-								<input
-									type="number"
-									value={size}
-									onChange={(e) => setSize(e.target.value)}
-									required
-								/>
-							</label>
-							<div className="form-btn-cont">
-								<button type="submit">
-									{editingId ? "módosít" : "hozzáad"}
-								</button>
-								<button type="button" onClick={handleClose}>
-									mégse
-								</button>
-							</div>
-						</form>
+										{categories.map((cat) => (
+											<option
+												key={cat.categoryId}
+												value={cat.categoryId}
+											>
+												{cat.categoryName}
+											</option>
+										))}
+									</select>
+								</label>
+
+								<label>
+									Méret:
+									<input
+										type="number"
+										value={size}
+										onChange={(e) =>
+											setSize(e.target.value)
+										}
+										required
+									/>
+								</label>
+
+								<div className="form-btn-cont">
+									<button type="submit">
+										{editingId ? "Módosít" : "Hozzáad"}
+									</button>
+									<button type="button" onClick={handleClose}>
+										Mégse
+									</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				)}
 				{/* <div className="hidden">
