@@ -13,3 +13,4 @@ public class RaktarApplication {
 		SpringApplication.run(RaktarApplication.class, args);
 	}
 }
+	
