@@ -3,6 +3,7 @@ import ProductsPage from './pages/ProductsPage'
 import WarehousePage from "./pages/WareHousePage";
 import TransactionsPage from "./pages/TransactionsPage";
 import BaseLayout from "./components/BaseLayout";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
 						path="/transactions"
 						element={<TransactionsPage />}
 					/>
+					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>
 		</Router>
