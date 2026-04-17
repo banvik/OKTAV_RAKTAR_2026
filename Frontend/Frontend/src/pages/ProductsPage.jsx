@@ -4,10 +4,11 @@ export default function ProductsPage() {
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([]);
 	const [editingId, setEditingId] = useState(null);
-    const [name, setName] = useState()
-    const [category, setCategory] = useState()
-    const [size, setSize] = useState()
+    const [name, setName] = useState("")
+    const [category, setCategory] = useState("")
+    const [size, setSize] = useState(0)
     const [isOpen, setIsOpen] = useState(false)
+	const [search, setSearch] = useState("");
 
     useEffect(() => {
 		fetch("http://localhost:8080/api/products")
@@ -25,6 +26,14 @@ export default function ProductsPage() {
 		const cat = categories.find((c) => c.categoryId === id);
 		return cat ? cat.categoryName : "Unknown";
 	};
+
+	const filteredProducts = products.filter(
+		(product) =>
+			product.productName.toLowerCase().includes(search.toLowerCase()) ||
+			getCategoryName(product.categoryId)
+				.toLowerCase()
+				.includes(search.toLowerCase()),
+	);
 
     function handleSubmit(e) {
 		e.preventDefault();
@@ -95,54 +104,68 @@ export default function ProductsPage() {
 		<div>
 			<div className="inventory-container">
 				<h1>Termékek</h1>
-				<button
-					onClick={() => setIsOpen(true)}
-					className="btn btn-primary"
-				>
-					Új tárgy felvétele
-				</button>
-				<div className="table-wrapper">
-					
+				<div className="flex gap-4">
+					<input
+						type="text"
+						placeholder="Keresés..."
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+					/>
+					<button
+						onClick={() => setIsOpen(true)}
+						className="btn btn-primary"
+					>
+						Új tárgy felvétele
+					</button>
 				</div>
-				<table>
-					<thead>
-						<tr>
-							<th>Terméknév</th>
-							<th>Kategória</th>
-							<th>Méret</th>
-							<th>Műveletek</th>
-						</tr>
-					</thead>
-					<tbody>
-						{products.map((product, i) => {
-							return (
-								<tr key={i}>
-									<td>{product.productName}</td>
-									<td>
-										{getCategoryName(product.categoryId)}
-									</td>
-									<td>{product.productSize}</td>
-									<td>
-										<button
-											onClick={() =>
-												handleEdit(product.productId)
-											}
-										>
-											Módosítás
-										</button>
-										<button
-											onClick={() =>
-												handleDelete(product.productId)
-											}
-										>
-											Törlés
-										</button>
-									</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
+				<div className="table-wrapper max-h-96 overflow-y-auto ">
+					<table>
+						<thead className="sticky top-0 bg-[#EEEBAB]">
+							<tr>
+								<th>Terméknév</th>
+								<th>Kategória</th>
+								<th>Méret</th>
+								<th>Műveletek</th>
+							</tr>
+						</thead>
+						<tbody>
+							{filteredProducts.map((product, i) => {
+								return (
+									<tr key={i}>
+										<td>{product.productName}</td>
+										<td>
+											{getCategoryName(
+												product.categoryId,
+											)}
+										</td>
+										<td>{product.productSize}</td>
+										<td>
+											<button
+												onClick={() =>
+													handleEdit(
+														product.productId,
+													)
+												}
+											>
+												Módosítás
+											</button>
+											<button
+												onClick={() =>
+													handleDelete(
+														product.productId,
+													)
+												}
+											>
+												Törlés
+											</button>
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				</div>
+				{!filteredProducts.length && <span>Nincs találat</span>}
 				{isOpen && (
 					<div className="modal-overlay" onClick={handleClose}>
 						<div
