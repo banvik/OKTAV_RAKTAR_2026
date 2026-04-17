@@ -53,7 +53,7 @@ button {
 	font-size: 1rem;
 	background-color: #153B08;
 	border: 2px solid #153B08;
-	padding: 6px;	
+	padding: 5px 6px;	
 	border-radius: 5px;
 	margin: 2px;
 }
@@ -95,7 +95,7 @@ button:hover {
 
 input,
 select {
-	padding: 5px 6px;
+	padding: 4px 6px;
 	border: 2px solid #153B08;
 	border-radius: 6px;
 	background-color: #FFFBBD;

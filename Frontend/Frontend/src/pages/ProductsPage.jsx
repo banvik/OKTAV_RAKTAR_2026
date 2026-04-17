@@ -104,18 +104,20 @@ export default function ProductsPage() {
 		<div>
 			<div className="inventory-container">
 				<h1>Termékek</h1>
-				<button
-					onClick={() => setIsOpen(true)}
-					className="btn btn-primary"
-				>
-					Új tárgy felvétele
-				</button>
-				<input
-					type="text"
-					placeholder="Keresés..."
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-				/>
+				<div className="flex gap-4">
+					<input
+						type="text"
+						placeholder="Keresés..."
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+					/>
+					<button
+						onClick={() => setIsOpen(true)}
+						className="btn btn-primary"
+					>
+						Új tárgy felvétele
+					</button>
+				</div>
 				<div className="table-wrapper max-h-96 overflow-y-auto ">
 					<table>
 						<thead className="sticky top-0 bg-[#EEEBAB]">
