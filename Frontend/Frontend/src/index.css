@@ -9,16 +9,23 @@ body {
 	background-color: #FFFBBD;
 	color: #153B08;
 }
+/* === Scrollbar container === */
+.table-wrapper {
+  scrollbar-width: thin; /* Firefox */
+scrollbar-color: #153B08 #FFFBBD;
+}
 
+/* === Chrome / Edge / Safari === */
+.table-wrapper::-webkit-scrollbar {
+width: 8px;
+}
 /* items page */
 table {
-	border-collapse: collapse;
 	background-color: #EEEBAB;
 }
 
 th,
 td {
-	border: 2px solid #153B08;
 	padding: 8px;
     cursor: pointer;
 }
@@ -45,6 +52,7 @@ button {
 	font-weight: bold;
 	font-size: 1rem;
 	background-color: #153B08;
+	border: 2px solid #153B08;
 	padding: 6px;	
 	border-radius: 5px;
 	margin: 2px;
@@ -53,7 +61,7 @@ button:hover {
 	cursor: pointer;
 	color: #153B08;
 	background-color: #EEEBAB;
-	border: 2px solid #153B08;
+	
 }
 .form-btn-cont {
 	display: flex;
