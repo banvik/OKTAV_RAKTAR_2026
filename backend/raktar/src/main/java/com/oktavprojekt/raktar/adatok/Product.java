@@ -1,18 +1,19 @@
 package com.oktavprojekt.raktar.adatok;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-// import lombok.Data;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "products") // Megegyezik az adatbázisbeli táblanévvel.
 @NoArgsConstructor // Kell a JPA-nak egy üres konstruktor.
 @AllArgsConstructor // Jó a teszteléshez.
-@Getter
-@Setter
+@Data
 public class Product {
 
     @Id
@@ -37,5 +38,12 @@ public class Product {
 
     @Column(name = "product_info")
     private String productInfo;
+
+    // --- KAPCSOLAT ---
+    // Ide jön a @OneToMany, ami a Stock osztályra mutat.
+    // A mappedBy értéke az a változónév legyen, ami a Stock osztályban van!
+    @OneToMany(mappedBy = "product") 
+    @JsonIgnore // Így a termék lekérésekor nem küldi el az összes raktárbejegyzést
+    private List<Stock> stocks;
    
 }

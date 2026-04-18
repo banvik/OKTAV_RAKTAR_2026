@@ -1,32 +1,37 @@
 package com.oktavprojekt.raktar.adatok;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "stock") // Megegyezik az adatbázisbeli táblanévvel.
+@Data
 @NoArgsConstructor // Kell a JPA-nak egy üres konstruktor.
 @AllArgsConstructor // Jó a teszteléshez.
-@Data
-@Getter
-@Setter
 public class Stock {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer stock_id;
+    @Column(name = "stock_id")
+    private Integer stockId;
     
-    private Integer product_id          = 1;
-    private Integer warehouse_id        = 1;
-    private Integer status_id           = 1;
-    private Integer product_quantity    = 1;
+    @ManyToOne // több készlettétel tartozik egy termékhez
+    @JoinColumn(name = "product_id") // ez az oszlopnév az adatbázisban
+    private Product product;
+    
+    @Column(name = "warehouse_id")
+    private Integer warehouseId        = 1;
+
+    @Column(name = "product_quantity")
+    private Integer productQuantity    = 1;
        
 }

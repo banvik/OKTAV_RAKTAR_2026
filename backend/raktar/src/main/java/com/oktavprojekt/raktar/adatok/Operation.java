@@ -2,6 +2,7 @@ package com.oktavprojekt.raktar.adatok;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,13 +25,23 @@ public class Operation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer operation_id;
+    @Column(name = "operation_id")
+    private Integer operationId;
     
-    private String operation_name       = "bevételezés";
-    private Integer stock_id            = 1;
-    private Integer user_id             = 1;
-    private Integer operation_quantity  = 1;
-    private LocalDateTime operation_timestamp = null;
+    @Column(name = "operation_name")
+    private String operationName       = "bevételezés";
+
+    @Column(name = "stock_id")
+    private Integer stockId            = 1;
+
+    @Column(name = "user_id")
+    private Integer userId             = 1;
+
+    @Column(name = "operation_quantity")
+    private Integer operationQuantity  = 1;
+    
+    @Column(name = "operation_timestamp")
+    private LocalDateTime operationTimestamp = null;
     
    
 }

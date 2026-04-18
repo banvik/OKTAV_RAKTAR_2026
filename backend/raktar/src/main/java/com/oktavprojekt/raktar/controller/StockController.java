@@ -1,0 +1,78 @@
+package com.oktavprojekt.raktar.controller;
+
+import org.springframework.web.bind.annotation.*;
+
+import com.oktavprojekt.raktar.adatbaziskezelo.StockRepository;
+import com.oktavprojekt.raktar.adatok.Stock;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping("/api")
+public class StockController {
+
+    @Autowired
+    private StockRepository repository;
+
+    @GetMapping("/stock")
+    public List<Stock> getAll() {
+
+        return repository.findAll(); // A Spring Boot automatikusan átalakítja JSON-ná!
+    }
+
+    @GetMapping("/stock/{id}")
+    public ResponseEntity<Stock> getStockById(@PathVariable Integer id) {
+        return repository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/stock")
+    public ResponseEntity<Stock> addStock(@RequestBody Stock newStock) {
+
+        Stock savedStock = repository.save(newStock); // A save() metódus elmenti az adatbázisba és visszaadja a már ID-val rendelkező objektumot
+        return new ResponseEntity<>(savedStock, HttpStatus.CREATED); // 201-es kóddal válaszolunk
+    }
+
+    @PutMapping("/stock/{id}")
+    public ResponseEntity<Stock> updateStock(
+            @PathVariable Integer id,
+            @RequestBody Stock updatedStock){
+/*
+        return repository.findById(id)
+                .map(existing -> {
+                    existing.setWarehouseId(updatedStock.getWarehouseId());
+                    existing.setProductQuantity(updatedStock.getProductQuantity());
+
+                    existing.setCategoryId(updatedProduct.getCategoryId());
+                    existing.setProductSize(updatedProduct.getProductSize());
+
+                    Product saved = repository.save(existing);
+                    return ResponseEntity.ok(saved);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build(); // 204
+    */
+    
+    return null;
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "A szerver fut és látja a kontrollert!";
+}
+}

@@ -1,5 +1,6 @@
 package com.oktavprojekt.raktar.adatok;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,9 +23,13 @@ public class Status {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer status_id;
+    @Column(name = "status_id")
+    private Integer statusId;
     
+    @Column(name = "status_type")
     private String status_type    = "raktáron";
+
+    @Column(name = "status_info")
     private String status_info    = "elérhető raktári készlet";
        
 }

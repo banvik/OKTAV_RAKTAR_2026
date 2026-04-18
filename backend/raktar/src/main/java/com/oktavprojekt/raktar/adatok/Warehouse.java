@@ -1,5 +1,6 @@
 package com.oktavprojekt.raktar.adatok;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,8 +23,10 @@ public class Warehouse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer warehouse_id;
-    
-    private String warehouse_name    = "főraktár";
-       
+    @Column(name = "warehouse_id")
+    private Integer warehouseId;
+
+    @Column(name = "warehouse_name")
+    private String warehouseName = "főraktár";
+
 }
