@@ -19,6 +19,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
+    @com.fasterxml.jackson.annotation.JsonProperty("productId")
     private Integer productId;
 
     @Column(name = "product_name")

@@ -25,7 +25,7 @@ public class Stock {
     private Integer stockId;
     
     @ManyToOne // több készlettétel tartozik egy termékhez
-    @JoinColumn(name = "product_id") // ez az oszlopnév az adatbázisban
+    @JoinColumn(name = "product_id", nullable = false) // ez az oszlopnév az adatbázisban
     private Product product;
     
     @Column(name = "warehouse_id")

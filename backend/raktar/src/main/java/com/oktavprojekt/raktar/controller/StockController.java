@@ -2,10 +2,13 @@ package com.oktavprojekt.raktar.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.oktavprojekt.raktar.adatbaziskezelo.ProductRepository;
 import com.oktavprojekt.raktar.adatbaziskezelo.StockRepository;
+import com.oktavprojekt.raktar.adatok.Product;
 import com.oktavprojekt.raktar.adatok.Stock;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 @RequestMapping("/api")
 public class StockController {
 
+    @Autowired
+    private ProductRepository productRepository;
     @Autowired
     private StockRepository repository;
 
@@ -33,42 +38,53 @@ public class StockController {
     }
 
     @PostMapping("/stock")
-    public ResponseEntity<Stock> addStock(@RequestBody Stock newStock) {
+    public ResponseEntity<?> addStock(@RequestBody Stock stock) {
+        // 1. Megnézzük, jött-e termék azonosító
+        if (stock.getProduct() == null || stock.getProduct().getProductId() == null) {
+            return ResponseEntity.badRequest().body("Hiba: Hiányzik a termék azonosítója!");
+        }
 
-        Stock savedStock = repository.save(newStock); // A save() metódus elmenti az adatbázisba és visszaadja a már ID-val rendelkező objektumot
-        return new ResponseEntity<>(savedStock, HttpStatus.CREATED); // 201-es kóddal válaszolunk
+        Integer productId = stock.getProduct().getProductId();
+
+        // 2. Megkeressük a valódi terméket
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+
+        if (optionalProduct.isPresent()) {
+            // Ha létezik, összekötjük a kettőt
+            stock.setProduct(optionalProduct.get());
+            
+            // 3. Mentés (Itt figyeld a változónevet!)
+            Stock saved = repository.save(stock);
+            return ResponseEntity.ok(saved);
+        } else {
+            // Ha nem létezik a termék
+            return ResponseEntity.status(404).body("Hiba: A " + productId + " azonosítójú termék nem található!");
+        }
     }
 
     @PutMapping("/stock/{id}")
-    public ResponseEntity<Stock> updateStock(
-            @PathVariable Integer id,
-            @RequestBody Stock updatedStock){
-/*
-        return repository.findById(id)
-                .map(existing -> {
-                    existing.setWarehouseId(updatedStock.getWarehouseId());
-                    existing.setProductQuantity(updatedStock.getProductQuantity());
+    public ResponseEntity<?> updateStock(@PathVariable Integer id, @RequestBody Stock stockDetails) {
+        Optional<Stock> stockData = repository.findById(id);
 
-                    existing.setCategoryId(updatedProduct.getCategoryId());
-                    existing.setProductSize(updatedProduct.getProductSize());
-
-                    Product saved = repository.save(existing);
-                    return ResponseEntity.ok(saved);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        if (stockData.isPresent()) {
+            Stock stock = stockData.get();
+            stock.setProductQuantity(stockDetails.getProductQuantity());
+            if (stockDetails.getWarehouseId() != null) {
+                stock.setWarehouseId(stockDetails.getWarehouseId());
+            }
+            return ResponseEntity.ok(repository.save(stock));
+        } else {
+            return ResponseEntity.status(404).body("Hiba: Nincs ilyen ID.");
+        }
     }
 
-    @DeleteMapping("/products/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
+    @DeleteMapping("/stock/{id}") // Figyelj, hogy /stock legyen, ne /products!
+    public ResponseEntity<Void> deleteStock(@PathVariable Integer id) {
         if (!repository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-
         repository.deleteById(id);
-        return ResponseEntity.noContent().build(); // 204
-    */
-    
-    return null;
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/test")

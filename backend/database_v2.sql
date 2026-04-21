@@ -49,19 +49,7 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_hungarian_ci;
 
--- ADATTABLA LETREHOZASA 4. / STATUSES /
-
-USE `oktav_raktarprojekt_02`;
-CREATE TABLE `statuses` (
-	status_id INT AUTO_INCREMENT PRIMARY KEY,
-	status_type VARCHAR(50) NOT NULL,
-	status_info VARCHAR(100) NOT NULL
-	)
-ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_hungarian_ci;
-
--- ADATTABLA LETREHOZASA 5. / STOCK /
+-- ADATTABLA LETREHOZASA 4. / STOCK /
 
 USE `oktav_raktarprojekt_02`;
 CREATE TABLE `stock` (
@@ -90,7 +78,7 @@ CREATE TABLE `stock` (
 	DEFAULT CHARSET=utf8mb4
 	COLLATE=utf8mb4_hungarian_ci;
 
--- ADATTABLA LETREHOZASA 6. / USERS /
+-- ADATTABLA LETREHOZASA 5. / USERS /
 
 USE `oktav_raktarprojekt_02`;
 CREATE TABLE `users` (
@@ -104,7 +92,7 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_hungarian_ci;
 
--- ADATTABLA LETREHOZASA 7. / OPERATIONS /
+-- ADATTABLA LETREHOZASA 6. / OPERATIONS /
 
 USE `oktav_raktarprojekt_02`;
 CREATE TABLE `operations` (
