@@ -7,6 +7,8 @@ import com.oktavprojekt.raktar.adatbaziskezelo.StockRepository;
 import com.oktavprojekt.raktar.adatok.Product;
 import com.oktavprojekt.raktar.adatok.Stock;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,13 @@ public class StockController {
     private ProductRepository productRepository;
     @Autowired
     private StockRepository repository;
+
+    public static class TransferRequest {
+        public Integer productId;
+        public Integer fromWarehouseId;
+        public Integer toWarehouseId;
+        public Integer quantity;
+    }
 
     @GetMapping("/stock")
     public List<Stock> getAll() {
@@ -61,6 +70,43 @@ public class StockController {
             return ResponseEntity.status(404).body("Hiba: A " + productId + " azonosítójú termék nem található!");
         }
     }
+
+    @PostMapping("/stock/transfer")
+    @Transactional // Fontos! Ha az egyik mentés sikerül, de a másik nem, vonja vissza az egészet!
+    public ResponseEntity<?> transferStock(@RequestBody TransferRequest request) {
+        
+        // 1. Forrás készlet megkeresése
+        Stock sourceStock = repository.findByProduct_ProductIdAndWarehouseId(
+            request.productId, request.fromWarehouseId)
+            .orElseThrow(() -> new RuntimeException("Forrás készlet nem található!"));
+
+        // 2. Ellenőrzés: Van elég áru?
+        if (sourceStock.getProductQuantity() < request.quantity) {
+            return ResponseEntity.badRequest().body("Hiba: Nincs elég készlet a forrás raktárban!");
+        }
+
+        // 3. Cél készlet megkeresése (vagy létrehozása, ha még nincs abban a raktárban)
+        Stock targetStock = repository.findByProduct_ProductIdAndWarehouseId(
+            request.productId, request.toWarehouseId)
+            .orElseGet(() -> {
+                Stock newStock = new Stock();
+                newStock.setProduct(sourceStock.getProduct());
+                newStock.setWarehouseId(request.toWarehouseId);
+                newStock.setProductQuantity(0);
+                return newStock;
+            });
+
+        // 4. Mennyiségek módosítása
+        sourceStock.setProductQuantity(sourceStock.getProductQuantity() - request.quantity);
+        targetStock.setProductQuantity(targetStock.getProductQuantity() + request.quantity);
+
+        // 5. Mentés
+        repository.save(sourceStock);
+        repository.save(targetStock);
+
+        return ResponseEntity.ok("Sikeres átmozgatás!");
+    }
+
 
     @PutMapping("/stock/{id}")
     public ResponseEntity<?> updateStock(@PathVariable Integer id, @RequestBody Stock stockDetails) {
