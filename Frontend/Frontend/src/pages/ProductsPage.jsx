@@ -115,7 +115,7 @@ export default function ProductsPage() {
     return (
 		<div>
 			<div className="inventory-container">
-				<h1>Termékek</h1>
+				<h1 className="text-2xl">Termékek</h1>
 				<div className="flex gap-4">
 					<input
 						type="text"
@@ -135,6 +135,7 @@ export default function ProductsPage() {
 						<thead className="sticky top-0 bg-[#EEEBAB]">
 							<tr>
 								<th>Terméknév</th>
+								<th>Azonosító kód</th>
 								<th>Kategória</th>
 								<th>Méret</th>
 								<th>Szín</th>
@@ -146,6 +147,7 @@ export default function ProductsPage() {
 								return (
 									<tr key={i}>
 										<td>{product.productName}</td>
+										<td>{product.productId}</td>
 										<td>
 											{getCategoryName(
 												product.categoryId,

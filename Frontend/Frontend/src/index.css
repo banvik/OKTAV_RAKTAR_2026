@@ -85,19 +85,3 @@ select:focus {
 	border-color: #0f2a06;
 	box-shadow: 0 0 0 3px rgba(21, 59, 8, 0.2);
 }
-
-
-@media (max-width: 768px) {
-
-.inventory-container h1 {
-    font-size: 1.5rem;
-}
-
-table {
-    font-size: 0.9rem;
-}
-
-button {
-    font-size: 0.9rem;
-}
-}
