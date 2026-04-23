@@ -119,7 +119,7 @@ public class StockController {
         // 4. Mentés
         repository.save(targetStock);
 
-        return ResponseEntity.ok("Sikeres bevételezés!");
+        return ResponseEntity.ok(targetStock);
     }
 
     @PostMapping("/stock/transfer")

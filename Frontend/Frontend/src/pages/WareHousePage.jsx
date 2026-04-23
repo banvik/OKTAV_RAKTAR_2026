@@ -45,19 +45,30 @@ export default function WarehousePage() {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(productData),
-		});
-		// .then((res) => res.json())
-		// .then((data) => {
-		// 	if (editingId) {
-		// 		setProducts((prev) =>
-		// 			prev.map((p) => (p.productId === editingId ? data : p)),
-		// 		);
-		// 	} else {
-		// 		setProducts((prev) => [...prev, data]);
-		// 	}
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				setStocks((prev) => {
+					const exists = prev.find(
+						(stock) =>
+							stock.product.productId === data.product.productId &&
+							stock.warehouseId === data.warehouseId,
+					);
 
-			handleClose();
-		// });
+					if (exists) {
+						return prev.map((stock) =>
+							stock.product.productId === data.product.productId &&
+							stock.warehouseId === data.warehouseId
+								? data
+								: stock,
+						);
+					}
+
+					return [...prev, data];
+				});
+
+				handleClose();
+			});
 	}
 	return (
 		<div>
