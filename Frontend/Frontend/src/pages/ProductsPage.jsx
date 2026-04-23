@@ -7,6 +7,9 @@ export default function ProductsPage() {
     const [name, setName] = useState("")
     const [category, setCategory] = useState("")
     const [size, setSize] = useState(0)
+	const [color, setColor] = useState("")
+	const [colorCode, setColorCode] = useState("")
+	const [info, setInfo] = useState("")
     const [isOpen, setIsOpen] = useState(false)
 	const [search, setSearch] = useState("");
 
@@ -42,6 +45,9 @@ export default function ProductsPage() {
 			productName: name,
 			categoryId: category,
 			productSize: size,
+			productColor: color,
+			productColorCode: colorCode,
+			productInfo: info,
 		};
 
 		const url = editingId
@@ -86,9 +92,12 @@ export default function ProductsPage() {
 		fetch(`http://localhost:8080/api/products/${id}`)
 			.then((res) => res.json())
 			.then((data) => {
-				setName(data.productName);
-				setCategory(data.categoryId);
-				setSize(data.productSize);
+				setName(data.productName?? "");
+				setCategory(data.categoryId?? "");
+				setSize(data.productSize?? "");
+				setColor(data.productColor?? "");
+				setColorCode(data.productColorCode?? "");
+				setInfo(data.productInfo?? "");
 				setEditingId(id);
 				setIsOpen(true);
 			});
@@ -96,14 +105,17 @@ export default function ProductsPage() {
 	function handleClose() {
 		setName("");
 		setCategory("");
-		setSize("");
-		setEditingId("");
+		setSize(0);
+		setColor("");
+		setColorCode("");
+		setInfo("");
+		setEditingId(null);
 		setIsOpen(false);
 	}
     return (
 		<div>
 			<div className="inventory-container">
-				<h1>Termékek</h1>
+				<h1 className="text-2xl">Termékek</h1>
 				<div className="flex gap-4">
 					<input
 						type="text"
@@ -123,8 +135,10 @@ export default function ProductsPage() {
 						<thead className="sticky top-0 bg-[#EEEBAB]">
 							<tr>
 								<th>Terméknév</th>
+								<th>Azonosító kód</th>
 								<th>Kategória</th>
 								<th>Méret</th>
+								<th>Szín</th>
 								<th>Műveletek</th>
 							</tr>
 						</thead>
@@ -133,12 +147,14 @@ export default function ProductsPage() {
 								return (
 									<tr key={i}>
 										<td>{product.productName}</td>
+										<td>{product.productId}</td>
 										<td>
 											{getCategoryName(
 												product.categoryId,
 											)}
 										</td>
 										<td>{product.productSize}</td>
+										<td>{product.productColor}</td>
 										<td>
 											<button
 												onClick={() =>
@@ -167,9 +183,12 @@ export default function ProductsPage() {
 				</div>
 				{!filteredProducts.length && <span>Nincs találat</span>}
 				{isOpen && (
-					<div className="modal-overlay" onClick={handleClose}>
+					<div
+						className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+						onClick={handleClose}
+					>
 						<div
-							className="modal"
+							className="bg-[#EEEBAB] p-6 rounded-xl min-w-[300px] max-w-[500px] shadow-xl"
 							onClick={(e) => e.stopPropagation()}
 						>
 							<form id="item-form" onSubmit={handleSubmit}>
@@ -215,6 +234,39 @@ export default function ProductsPage() {
 										value={size}
 										onChange={(e) =>
 											setSize(e.target.value)
+										}
+										required
+									/>
+								</label>
+								<label>
+									Szín:
+									<input
+										type="text"
+										value={color}
+										onChange={(e) =>
+											setColor(e.target.value)
+										}
+										required
+									/>
+								</label>
+								<label>
+									Színkód:
+									<input
+										type="text"
+										value={colorCode}
+										onChange={(e) =>
+											setColorCode(e.target.value)
+										}
+										required
+									/>
+								</label>
+								<label>
+									Leírás:
+									<input
+										type="text"
+										value={info}
+										onChange={(e) =>
+											setInfo(e.target.value)
 										}
 										required
 									/>

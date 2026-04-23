@@ -49,6 +49,9 @@ public class ProductController {
                     existing.setProductName(updatedProduct.getProductName());
                     existing.setCategoryId(updatedProduct.getCategoryId());
                     existing.setProductSize(updatedProduct.getProductSize());
+                    existing.setProductColor(updatedProduct.getProductColor());
+                    existing.setProductColorCode(updatedProduct.getProductColorCode());
+                    existing.setProductInfo(updatedProduct.getProductInfo());
 
                     Product saved = repository.save(existing);
                     return ResponseEntity.ok(saved);

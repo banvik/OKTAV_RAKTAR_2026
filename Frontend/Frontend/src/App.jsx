@@ -6,7 +6,7 @@ import BaseLayout from "./components/BaseLayout";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
-  return (
+return (
 		<Router>
 			<Routes>
 				<Route path="/" element={<BaseLayout />}>
@@ -20,7 +20,7 @@ function App() {
 				</Route>
 			</Routes>
 		</Router>
-  );
+);
 }
 
 export default App
