@@ -33,12 +33,6 @@ export default function WarehousePage() {
 			quantity: quantity,
 		};
 
-		// const url = editingId
-		// 	? `http://localhost:8080/api/products/${editingId}`
-		// 	: "http://localhost:8080/api/products";
-
-		// const method = editingId ? "PUT" : "POST";
-
 		fetch("http://localhost:8080/api/stock/incoming", {
 			method: "POST",
 			headers: {
@@ -71,7 +65,7 @@ export default function WarehousePage() {
 			});
 	}
 	return (
-		<div>
+		<div className="flex flex-col gap-2 items-center justify-center">
 			<button onClick={() => setIsOpen(true)}>Bevételezés</button>
 			<div className="table-wrapper max-h-96 overflow-y-auto ">
 				<table>
@@ -122,6 +116,7 @@ export default function WarehousePage() {
 							<label>
 								Termék:
 								<select
+									size={2}
 									value={productId}
 									onChange={(e) =>
 										setProductId(Number(e.target.value))
