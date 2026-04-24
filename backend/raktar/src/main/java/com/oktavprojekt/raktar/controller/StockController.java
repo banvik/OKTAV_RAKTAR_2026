@@ -38,7 +38,12 @@ public class StockController {
         public Integer quantity;
     }
 
-    // ----  READ  műveletek  ----
+    @GetMapping("/test")
+    public String test() {
+        return "A szerver fut és látja a kontrollert!";
+    }
+
+    // ----  STOCK / CRUD  műveletek  ----
 
     @GetMapping("/stock")
     public List<Stock> getAll() {
@@ -52,13 +57,6 @@ public class StockController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-    @GetMapping("/test")
-    public String test() {
-        return "A szerver fut és látja a kontrollert!";
-    }
-
-    // ----  CREATE  műveletek  ----
 
     @PostMapping("/stock")
     public ResponseEntity<?> addStock(@RequestBody Stock stock) {
@@ -86,7 +84,7 @@ public class StockController {
     }
 
     @PostMapping("/stock/incoming")
-        //{ "productId": 1, "productQuantity": 100 }
+        // JSON minta : { "productId": 1, "productQuantity": 2 }
     @Transactional
     public ResponseEntity<?> incomingStock(@RequestBody IncomingRequest request) {
 
@@ -123,6 +121,7 @@ public class StockController {
     }
 
     @PostMapping("/stock/transfer")
+        // JSON minta : { "productId": 1, "fromWarehouseId": 2, "toWarehouseId": 3, "quantity": 4}
     @Transactional // Fontos! Ha az egyik mentés sikerül, de a másik nem, vonja vissza az egészet!
     public ResponseEntity<?> transferStock(@RequestBody TransferRequest request) {
         
@@ -157,6 +156,10 @@ public class StockController {
 
         return ResponseEntity.ok("Sikeres átmozgatás!");
     }
+
+    // ----  CREATE  műveletek  ----
+
+
 
     // ----  UPDATE  műveletek  ----
 

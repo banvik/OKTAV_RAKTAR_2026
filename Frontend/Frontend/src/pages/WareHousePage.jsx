@@ -47,12 +47,6 @@ export default function WarehousePage() {
 			quantity: quantity,
 		};
 
-		// const url = editingId
-		// 	? `http://localhost:8080/api/products/${editingId}`
-		// 	: "http://localhost:8080/api/products";
-
-		// const method = editingId ? "PUT" : "POST";
-
 		fetch("http://localhost:8080/api/stock/incoming", {
 			method: "POST",
 			headers: {
@@ -169,6 +163,7 @@ export default function WarehousePage() {
 							<label>
 								Termék:
 								<select
+									size={2}
 									value={productId}
 									onChange={(e) =>
 										setProductId(Number(e.target.value))
