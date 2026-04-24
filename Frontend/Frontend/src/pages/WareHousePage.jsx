@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 
 export default function WarehousePage() {
 	const [stocks, setStocks] = useState([])
-	const [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(false);
+	const [products, setProducts] = useState([])
 	const [quantity, setQuantity] = useState(0);
 	const [productId, setProductId] = useState(0);
 	const [warehouseId, setWarehouseID] = useState(0);
@@ -13,46 +14,59 @@ export default function WarehousePage() {
 			.then((data) => setStocks(data));
 	}, []);
 
+	useEffect(() => {
+		fetch("http://localhost:8080/api/products")
+			.then((res) => res.json())
+			.then((data) => setProducts(data));
+	}, []);
+
 	function handleClose(){
+		setProductId(0)
+		setQuantity(0)
 		setIsOpen(false)
 	}
 	function handleSubmit(e) {
 		e.preventDefault();
 
 		const productData = {
-			product: { productId: productId },
-			warehouseId: warehouseId,
-			productQuantity: quantity,
+			productId: productId,
+			quantity: quantity,
 		};
 
-		// const url = editingId
-		// 	? `http://localhost:8080/api/products/${editingId}`
-		// 	: "http://localhost:8080/api/products";
-
-		// const method = editingId ? "PUT" : "POST";
-
-		fetch("http://localhost:8080/api/stock", {
+		fetch("http://localhost:8080/api/stock/incoming", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(productData),
-		});
-		// .then((res) => res.json())
-		// .then((data) => {
-		// 	if (editingId) {
-		// 		setProducts((prev) =>
-		// 			prev.map((p) => (p.productId === editingId ? data : p)),
-		// 		);
-		// 	} else {
-		// 		setProducts((prev) => [...prev, data]);
-		// 	}
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				setStocks((prev) => {
+					const exists = prev.find(
+						(stock) =>
+							stock.product.productId === data.product.productId &&
+							stock.warehouseId === data.warehouseId,
+					);
 
-		// 	handleClose();
-		// });
+					if (exists) {
+						return prev.map((stock) =>
+							stock.product.productId === data.product.productId &&
+							stock.warehouseId === data.warehouseId
+								? data
+								: stock,
+						);
+					}
+
+					return [...prev, data];
+				});
+
+				handleClose();
+			});
 	}
 	return (
-		<div>
+		<div className="flex flex-col gap-2 items-center justify-center">
+			<button onClick={() => setIsOpen(true)}>Bevételezés</button>
 			<div className="table-wrapper max-h-96 overflow-y-auto ">
 				<table>
 					<thead className="sticky top-0 bg-[#EEEBAB]">
@@ -101,34 +115,32 @@ export default function WarehousePage() {
 						<form id="item-form" onSubmit={handleSubmit}>
 							<label>
 								Termék:
-								<input
-									type="number"
+								<select
+									size={2}
 									value={productId}
 									onChange={(e) =>
-										setProductId(e.target.value)
+										setProductId(Number(e.target.value))
 									}
 									required
-								/>
+								>
+									<option value="">Válassz terméket</option>
+									{products.map((p) => (
+										<option
+											key={p.productId}
+											value={p.productId}
+										>
+											{p.productName}
+										</option>
+									))}
+								</select>
 							</label>
-							<label>
-								Raktár:
-								<input
-									type="number"
-									value={warehouseId}
-									onChange={(e) =>
-										setWarehouseID(e.target.value)
-									}
-									required
-								/>
-							</label>
-
 							<label>
 								Mennyiség:
 								<input
 									type="number"
 									value={quantity}
 									onChange={(e) =>
-										setQuantity(e.target.value)
+										setQuantity(Number(e.target.value))
 									}
 									required
 								/>
