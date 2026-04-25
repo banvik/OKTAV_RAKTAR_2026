@@ -35,6 +35,7 @@ public class StockController {
 
     public static class OutgoingRequest { // Kiadás segédosztálya
         public Integer productId;
+        public Integer warehouseId;
         public Integer quantity;
     }
 
@@ -155,6 +156,39 @@ public class StockController {
         repository.save(targetStock);
 
         return ResponseEntity.ok("Sikeres átmozgatás!");
+    }
+
+    @PostMapping("/stock/outgoing")
+        // JSON minta : { "productId": 1, "warehouseId": 2, "quantity": 3}
+    @Transactional
+    public ResponseEntity<?> outgoingStock(@RequestBody OutgoingRequest request) {
+
+        // 0. Validáció
+        if (request.productId == null || request.warehouseId == null 
+            || request.quantity == null || request.quantity <= 0) {
+            return ResponseEntity.badRequest().body("Hibás bemenet!");
+        }
+
+        // 1. Készlet megkeresése
+        Stock stock = repository.findByProduct_ProductIdAndWarehouseId(
+                request.productId, request.warehouseId)
+            .orElseThrow(() -> new RuntimeException("Készlet nem található a megadott raktárban!"));
+
+        // 2. Ellenőrzés: van elég készlet?
+        if (stock.getProductQuantity() < request.quantity) {
+            return ResponseEntity.badRequest()
+                .body("Hiba: Nincs elegendő készlet!");
+        }
+
+        // 3. Mennyiség csökkentése
+        stock.setProductQuantity(
+            stock.getProductQuantity() - request.quantity
+        );
+
+        // 4. Mentés
+        repository.save(stock);
+
+        return ResponseEntity.ok(stock);
     }
 
     // ----  CREATE  műveletek  ----
