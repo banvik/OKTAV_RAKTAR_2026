@@ -5,13 +5,13 @@ export default function WarehousePage() {
 	const [stocks, setStocks] = useState([])
 	const [isOpen, setIsOpen] = useState(false);
 	const [isTransferOpen, setIsTransferOpen] = useState(false);
+	const [isDispatch, setIsDispatch] = useState(false)
 	const [products, setProducts] = useState([])
 	const [quantity, setQuantity] = useState(0);
 	const [productId, setProductId] = useState(0);
 	const [warehouseId, setWarehouseID] = useState(0);
 	const [activeWarehouseId, setActiveWarehouseId] = useState(1)
 	const [activeWarehouseStock, setActiveWarehouseStock] = useState([])
-	const [fromWarehouseId, setFromWarehouseId] = useState(0)
 	const [toWarehouseId, setToWarehouseId] = useState(0)
 
 	const warehouses = [1,2,3,4]
@@ -88,7 +88,10 @@ async function handleMove(e) {
 		toWarehouseId: toWarehouseId,
 		quantity: quantity,
 	};
-
+	if(isDispatch){
+		toast.error("Kiadás jelenleg nem lehetséges!")
+		return
+	}
 	try {
 		const response = await fetch("http://localhost:8080/api/stock/transfer", {
 			method: "POST",
@@ -149,14 +152,21 @@ async function handleMove(e) {
 									<td>{stock.productQuantity}</td>
 									<td>{stock.warehouseId}</td>
 									<td>
+										{(activeWarehouseId === 1 || activeWarehouseId === 3 ) && (<>
+										<button
+											onClick={() => {setIsTransferOpen(true); setIsDispatch(true);setProductId(stock.product.productId)}}
+										>
+											Kiadás
+										</button>
+										</>)}
 										{(activeWarehouseId === 1 )&& (<>
 										<button
-											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setFromWarehouseId(1),setToWarehouseId(2)}}
+											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setToWarehouseId(2)}}
 										>
 											Zárolás
 										</button>
 										<button
-											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setFromWarehouseId(1),setToWarehouseId(3)}}
+											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setToWarehouseId(3)}}
 										>
 											Foglalás
 										</button>
@@ -256,7 +266,7 @@ async function handleMove(e) {
 								/>
 							</label>
 							<div className="form-btn-cont">
-								<button type="submit">Áthelyezés</button>
+								<button type="submit">{isDispatch? "Kiadás" : "Áthelyezés"}</button>
 								<button type="button" onClick={()=> setIsTransferOpen(false)}>
 									Mégse
 								</button>
