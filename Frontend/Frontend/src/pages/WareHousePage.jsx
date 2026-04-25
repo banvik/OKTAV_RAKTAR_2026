@@ -9,12 +9,12 @@ export default function WarehousePage() {
 	const [products, setProducts] = useState([])
 	const [quantity, setQuantity] = useState(0);
 	const [productId, setProductId] = useState(0);
+	const [warehouses, setWarehouses] = useState([])
 	const [warehouseId, setWarehouseID] = useState(0);
 	const [activeWarehouseId, setActiveWarehouseId] = useState(1)
 	const [activeWarehouseStock, setActiveWarehouseStock] = useState([])
 	const [toWarehouseId, setToWarehouseId] = useState(0)
 
-	const warehouses = [1,2,3,4]
 
 	useEffect(() => {
 		fetch("http://localhost:8080/api/stock")
@@ -26,6 +26,12 @@ export default function WarehousePage() {
 		fetch("http://localhost:8080/api/products")
 			.then((res) => res.json())
 			.then((data) => setProducts(data));
+	}, []);
+
+	useEffect(() => {
+		fetch("http://localhost:8080/api/warehouses")
+			.then((res) => res.json())
+			.then((data) => setWarehouses(data));
 	}, []);
 
 	useEffect(()=> {
@@ -89,10 +95,48 @@ async function handleMove(e) {
 		quantity: quantity,
 	};
 	if(isDispatch){
-		toast.error("Kiadás jelenleg nem lehetséges!")
-		return
+		const outGoing = {
+			productId: productId,
+			warehouseId: activeWarehouseId,
+			quantity: quantity,
+		}
+		try {
+		const response = await fetch("http://localhost:8080/api/stock/outgoing", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(outGoing),
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json().catch(() => null);
+			const message = errorData?.message || "Sikertelen Művelet!";
+			throw new Error(message);
+		}
+
+		const stockRes = await fetch("http://localhost:8080/api/stock");
+
+		if (!stockRes.ok) {
+			throw new Error("Raktárkészlet betöltése sikertelen!");
+		}
+
+		const data = await stockRes.json();
+		setStocks(data);
+
+		toast.success("Sikeres készletmozgatás!");
+
+		setQuantity(0);
+		setIsTransferOpen(false);
+		setIsDispatch(false);
+
+	} catch (error) {
+		console.error(error);
+
+		toast.error(error.message || "Készletmozgatás sikertelen!");
 	}
-	try {
+	}
+	else {try {
 		const response = await fetch("http://localhost:8080/api/stock/transfer", {
 			method: "POST",
 			headers: {
@@ -125,23 +169,21 @@ async function handleMove(e) {
 		console.error(error);
 
 		toast.error(error.message || "Készletmozgatás sikertelen!");
-	}
+	}}
 }
 	return (
-		<div className="flex flex-col items-center gap-2">
-			<div className="flex">
-				{warehouses.map(warehouse => <button key={warehouse} onClick={() => setActiveWarehouseId(warehouse)}>{warehouse}</button>)}
+		<div className="flex items-center gap-2">
+			<div className="flex flex-col gap-2">
+				{warehouses.map(warehouse => <button key={warehouse.warehouseId} onClick={() => setActiveWarehouseId(warehouse.warehouseId)}>{warehouse.warehouseName}</button>)}
 			</div>
-			<button onClick={() => setIsOpen(true)}>Bevételezés</button>
-			<button onClick={(e) => handleMove(e)}>Mozgatás</button>
-			
+			<div className="flex flex-1 justify-center">
 			<div className="table-wrapper max-h-96 overflow-y-auto ">
+				<h1 className="text-2xl" >{warehouses.find(warehouse => warehouse.warehouseId === activeWarehouseId)?.warehouseName} Raktár</h1>	
 				<table>
 					<thead className="sticky top-0 bg-[#EEEBAB]">
 						<tr>
 							<th>Terméknév</th>
 							<th>Mennyiség</th>
-							<th>Raktár</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -150,8 +192,10 @@ async function handleMove(e) {
 								<tr key={i}>
 									<td>{stock.product.productName}</td>
 									<td>{stock.productQuantity}</td>
-									<td>{stock.warehouseId}</td>
-									<td>
+									<td className="flex gap-1">
+										{activeWarehouseId === 1 && (
+											<button onClick={() => setIsOpen(true)}>Bevételezés</button>
+										)}
 										{(activeWarehouseId === 1 || activeWarehouseId === 3 ) && (<>
 										<button
 											onClick={() => {setIsTransferOpen(true); setIsDispatch(true);setProductId(stock.product.productId)}}
@@ -191,6 +235,7 @@ async function handleMove(e) {
 					</tbody>
 				</table>
 			</div>
+			</div>		
 			{isOpen && (
 				<div
 					className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"

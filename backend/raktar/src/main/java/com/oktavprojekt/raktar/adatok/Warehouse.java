@@ -27,6 +27,6 @@ public class Warehouse {
     private Integer warehouseId;
 
     @Column(name = "warehouse_name")
-    private String warehouseName = "főraktár";
+    private String warehouseName;
 
 }
