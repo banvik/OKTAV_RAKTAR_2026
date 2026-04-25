@@ -1,12 +1,20 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function WarehousePage() {
 	const [stocks, setStocks] = useState([])
 	const [isOpen, setIsOpen] = useState(false);
+	const [isTransferOpen, setIsTransferOpen] = useState(false);
 	const [products, setProducts] = useState([])
 	const [quantity, setQuantity] = useState(0);
 	const [productId, setProductId] = useState(0);
 	const [warehouseId, setWarehouseID] = useState(0);
+	const [activeWarehouseId, setActiveWarehouseId] = useState(1)
+	const [activeWarehouseStock, setActiveWarehouseStock] = useState([])
+	const [fromWarehouseId, setFromWarehouseId] = useState(0)
+	const [toWarehouseId, setToWarehouseId] = useState(0)
+
+	const warehouses = [1,2,3,4]
 
 	useEffect(() => {
 		fetch("http://localhost:8080/api/stock")
@@ -19,6 +27,13 @@ export default function WarehousePage() {
 			.then((res) => res.json())
 			.then((data) => setProducts(data));
 	}, []);
+
+	useEffect(()=> {
+		if(stocks.length > 0){
+			setActiveWarehouseStock(stocks.filter(stock => stock.warehouseId === activeWarehouseId && stock.productQuantity > 0))
+		}
+		
+	},[stocks, activeWarehouseId])
 
 	function handleClose(){
 		setProductId(0)
@@ -64,9 +79,59 @@ export default function WarehousePage() {
 				handleClose();
 			});
 	}
+async function handleMove(e) {
+	e.preventDefault();
+
+	const transferInfo = {
+		productId: productId,
+		fromWarehouseId: activeWarehouseId,
+		toWarehouseId: toWarehouseId,
+		quantity: quantity,
+	};
+
+	try {
+		const response = await fetch("http://localhost:8080/api/stock/transfer", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(transferInfo),
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json().catch(() => null);
+			const message = errorData?.message || "Sikertelen Művelet!";
+			throw new Error(message);
+		}
+
+		const stockRes = await fetch("http://localhost:8080/api/stock");
+
+		if (!stockRes.ok) {
+			throw new Error("Raktárkészlet betöltése sikertelen!");
+		}
+
+		const data = await stockRes.json();
+		setStocks(data);
+
+		toast.success("Sikeres készletmozgatás!");
+
+		setQuantity(0);
+		setIsTransferOpen(false);
+
+	} catch (error) {
+		console.error(error);
+
+		toast.error(error.message || "Készletmozgatás sikertelen!");
+	}
+}
 	return (
-		<div className="flex flex-col gap-2 items-center justify-center">
+		<div className="flex flex-col items-center gap-2">
+			<div className="flex">
+				{warehouses.map(warehouse => <button key={warehouse} onClick={() => setActiveWarehouseId(warehouse)}>{warehouse}</button>)}
+			</div>
 			<button onClick={() => setIsOpen(true)}>Bevételezés</button>
+			<button onClick={(e) => handleMove(e)}>Mozgatás</button>
+			
 			<div className="table-wrapper max-h-96 overflow-y-auto ">
 				<table>
 					<thead className="sticky top-0 bg-[#EEEBAB]">
@@ -77,27 +142,40 @@ export default function WarehousePage() {
 						</tr>
 					</thead>
 					<tbody>
-						{stocks.map((stock, i) => {
+						{activeWarehouseStock.map((stock, i) => {
 							return (
 								<tr key={i}>
 									<td>{stock.product.productName}</td>
 									<td>{stock.productQuantity}</td>
 									<td>{stock.warehouseId}</td>
 									<td>
+										{(activeWarehouseId === 1 )&& (<>
 										<button
-											onClick={() => console.log("Edit")}
+											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setFromWarehouseId(1),setToWarehouseId(2)}}
 										>
-											Módosítás
+											Zárolás
 										</button>
 										<button
-											onClick={() =>
-												console.log("törlés")
-											}
+											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setFromWarehouseId(1),setToWarehouseId(3)}}
 										>
-											Törlés
+											Foglalás
 										</button>
+										<button
+											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setFromWarehouseId(1),setToWarehouseId(4)}}
+										>
+											Selejtezés
+										</button>
+										</>)}
+										{(activeWarehouseId !== 1 ) && (<>
+										<button
+											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setFromWarehouseId(2),setToWarehouseId(1)}}
+										>
+											Állapot Feloldása
+										</button>
+										</>)}
 									</td>
 								</tr>
+							
 							);
 						})}
 					</tbody>
@@ -149,6 +227,37 @@ export default function WarehousePage() {
 							<div className="form-btn-cont">
 								<button type="submit">Hozzáad</button>
 								<button type="button" onClick={handleClose}>
+									Mégse
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			)}
+			{isTransferOpen && (
+				<div
+					className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+					onClick={()=> setIsTransferOpen(false)}
+				>
+					<div
+						className="bg-[#EEEBAB] p-6 rounded-xl min-w-[300px] max-w-[500px] shadow-xl"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<form id="item-form" onSubmit={(e) => handleMove(e)}>
+							<label>
+								Mennyiség:
+								<input
+									type="number"
+									value={quantity}
+									onChange={(e) =>
+										setQuantity(Number(e.target.value))
+									}
+									required
+								/>
+							</label>
+							<div className="form-btn-cont">
+								<button type="submit">Áthelyezés</button>
+								<button type="button" onClick={()=> setIsTransferOpen(false)}>
 									Mégse
 								</button>
 							</div>
