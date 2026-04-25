@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function WarehousePage() {
 	const [stocks, setStocks] = useState([])
@@ -78,35 +79,58 @@ export default function WarehousePage() {
 				handleClose();
 			});
 	}
-	function handleMove(e) {
-		e.preventDefault()
-		const transferInfo = {
-			productId: productId,
-			fromWarehouseId: fromWarehouseId,
-			toWarehouseId: toWarehouseId,
-			quantity: quantity
+async function handleMove(e) {
+	e.preventDefault();
 
-		}
-		fetch("http://localhost:8080/api/stock/transfer", {
+	const transferInfo = {
+		productId: productId,
+		fromWarehouseId: activeWarehouseId,
+		toWarehouseId: toWarehouseId,
+		quantity: quantity,
+	};
+
+	try {
+		const response = await fetch("http://localhost:8080/api/stock/transfer", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(transferInfo),
-		})
-		.then(()=> fetch("http://localhost:8080/api/stock"))
-		.then((res) => res.json())
-		.then((data) => setStocks(data))
-		setQuantity(0)
-		setIsTransferOpen(false)
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json().catch(() => null);
+			const message = errorData?.message || "Sikertelen Művelet!";
+			throw new Error(message);
+		}
+
+		const stockRes = await fetch("http://localhost:8080/api/stock");
+
+		if (!stockRes.ok) {
+			throw new Error("Raktárkészlet betöltése sikertelen!");
+		}
+
+		const data = await stockRes.json();
+		setStocks(data);
+
+		toast.success("Sikeres készletmozgatás!");
+
+		setQuantity(0);
+		setIsTransferOpen(false);
+
+	} catch (error) {
+		console.error(error);
+
+		toast.error(error.message || "Készletmozgatás sikertelen!");
 	}
+}
 	return (
 		<div className="flex flex-col items-center gap-2">
 			<div className="flex">
 				{warehouses.map(warehouse => <button key={warehouse} onClick={() => setActiveWarehouseId(warehouse)}>{warehouse}</button>)}
 			</div>
 			<button onClick={() => setIsOpen(true)}>Bevételezés</button>
-			<button onClick={() => handleMove()}>Mozgatás</button>
+			<button onClick={(e) => handleMove(e)}>Mozgatás</button>
 			
 			<div className="table-wrapper max-h-96 overflow-y-auto ">
 				<table>
@@ -140,6 +164,13 @@ export default function WarehousePage() {
 											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setFromWarehouseId(1),setToWarehouseId(4)}}
 										>
 											Selejtezés
+										</button>
+										</>)}
+										{(activeWarehouseId !== 1 ) && (<>
+										<button
+											onClick={() => {setIsTransferOpen(true);setProductId(stock.product.productId);setFromWarehouseId(2),setToWarehouseId(1)}}
+										>
+											Állapot Feloldása
 										</button>
 										</>)}
 									</td>

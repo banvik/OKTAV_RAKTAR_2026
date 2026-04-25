@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function BaseLayout() {
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -26,6 +28,7 @@ export default function BaseLayout() {
 				</div>
 			</nav>
 			<main className="p-5">
+				<ToastContainer />
 				<Outlet />
 			</main>
 		</div>
