@@ -29,9 +29,9 @@ public class Stock {
     private Product product;
     
     @Column(name = "warehouse_id")
-    private Integer warehouseId        = 1;
+    private Integer warehouseId;
 
     @Column(name = "product_quantity")
-    private Integer productQuantity    = 1;
+    private Integer productQuantity;
        
 }

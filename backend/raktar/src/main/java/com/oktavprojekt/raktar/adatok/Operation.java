@@ -32,16 +32,15 @@ public class Operation {
     private String operationName       = "bevételezés";
 
     @Column(name = "stock_id")
-    private Integer stockId            = 1;
+    private Integer stockId;
 
     @Column(name = "user_id")
-    private Integer userId             = 1;
+    private Integer userId;
 
     @Column(name = "operation_quantity")
-    private Integer operationQuantity  = 1;
+    private Integer operationQuantity;
     
     @Column(name = "operation_timestamp")
-    private LocalDateTime operationTimestamp = null;
+    private LocalDateTime operationTimestamp;
     
-   
 }
