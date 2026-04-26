@@ -12,6 +12,8 @@ export default function ProductsPage() {
 	const [info, setInfo] = useState("")
     const [isOpen, setIsOpen] = useState(false)
 	const [search, setSearch] = useState("");
+	const [selectedProduct, setSelectedProduct] = useState(null);
+	const [isViewOpen, setIsViewOpen] = useState(false);
 
     useEffect(() => {
 		fetch("http://localhost:8080/api/products")
@@ -112,6 +114,12 @@ export default function ProductsPage() {
 		setEditingId(null);
 		setIsOpen(false);
 	}
+
+	function handleViewClose() {
+		setSelectedProduct(null);
+		setIsViewOpen(false);
+	}
+
     return (
 		<div>
 			<div className="inventory-container">
@@ -145,7 +153,12 @@ export default function ProductsPage() {
 						<tbody>
 							{filteredProducts.map((product, i) => {
 								return (
-									<tr key={i}>
+									<tr key={i}
+										onClick={() => {
+											setSelectedProduct(product);
+											setIsViewOpen(true);
+										}}
+										>
 										<td>{product.productName}</td>
 										<td>{product.productId}</td>
 										<td>
@@ -157,20 +170,19 @@ export default function ProductsPage() {
 										<td>{product.productColor}</td>
 										<td>
 											<button
-												onClick={() =>
-													handleEdit(
-														product.productId,
-													)
+												onClick={(e) => {
+													e.stopPropagation(),
+													handleEdit(product.productId)
+												}
 												}
 											>
 												Módosítás
 											</button>
 											<button
-												onClick={() =>
-													handleDelete(
-														product.productId,
-													)
-												}
+												onClick={(e) => {
+													e.stopPropagation();
+													handleDelete(product.productId);
+												}}
 											>
 												Törlés
 											</button>
@@ -284,12 +296,31 @@ export default function ProductsPage() {
 						</div>
 					</div>
 				)}
-				{/* <div className="hidden">
-					<button >X</button>
-					<p >megnevezés:</p>
-					<p >kategória:</p>
-					<p >hossz:</p>
-				</div> */}
+				{isViewOpen && selectedProduct && (
+					<div
+						className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+						onClick={handleViewClose}
+					>
+						<div
+							className="bg-[#EEEBAB] p-6 rounded-xl min-w-[300px] max-w-[500px] shadow-xl"
+							onClick={(e) => e.stopPropagation()}
+						>
+							<h2 className="text-xl mb-4">Termék részletei</h2>
+
+							<p><strong>Név:</strong> {selectedProduct.productName}</p>
+							<p><strong>Azonosító:</strong> {selectedProduct.productId}</p>
+							<p><strong>Kategória:</strong> {getCategoryName(selectedProduct.categoryId)}</p>
+							<p><strong>Méret:</strong> {selectedProduct.productSize}</p>
+							<p><strong>Szín:</strong> {selectedProduct.productColor}</p>
+							<p><strong>Színkód:</strong> {selectedProduct.productColorCode}</p>
+							<p><strong>Leírás:</strong> {selectedProduct.productInfo}</p>
+
+							<div className="mt-4">
+								<button onClick={handleViewClose}>Bezár</button>
+							</div>
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);
