@@ -1,6 +1,5 @@
 package com.oktavprojekt.raktar.adatbaziskezelo;
 
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.oktavprojekt.raktar.adatok.User;
 
