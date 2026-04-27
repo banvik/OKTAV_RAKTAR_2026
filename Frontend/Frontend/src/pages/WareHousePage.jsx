@@ -196,6 +196,7 @@ async function handleMove(e) {
 			</div>
 			<div className="flex flex-1 justify-center">
 				<div className="table-wrapper max-h-96 overflow-y-auto ">
+					<div className="flex justify-between mb-2">
 					<h1 className="text-2xl">
 						{
 							warehouses.find(
@@ -205,6 +206,10 @@ async function handleMove(e) {
 						}{" "}
 						Raktár
 					</h1>
+					{activeWarehouseId === 1 && (
+						<button handleClick={() => setIsOpen(true)}>Bevételezés</button>
+					)}
+					</div>
 					<table>
 						<thead className="sticky top-0 bg-[#EEEBAB]">
 							<tr>
@@ -215,58 +220,107 @@ async function handleMove(e) {
 						</thead>
 						<tbody>
 							{activeWarehouseStock.length === 0 ? (
-							<tr>
-								<td colSpan={3} className="text-center py-4">
-									A raktár üres
-								</td>
-							</tr>
-						) : (
-							activeWarehouseStock.map((stock, i) => {
-								return (
-									<tr key={i}>
-										<td>{stock.product.productName}</td>
-										<td>{stock.productQuantity}</td>
-										<td className="flex gap-1 mx-3">
-											{activeWarehouseId === 1 && (
-												<Button
-													handleClick={() =>
-														setIsOpen(true)
-													}
-													buttonIcon={<FaInbox />}
-													buttonText={"Bevételezés"}
-												/>
-											)}
-											{(activeWarehouseId === 1 ||
-												activeWarehouseId === 3) && (
-												<Button
-													handleClick={() => {
-														setIsTransferOpen(true);
-														setIsDispatch(true);
-														setProductId(
-															stock.product
-																.productId,
-														);
-													}}
-													buttonIcon={<FaTruck />}
-													buttonText={"Kiadás"}
-												/>
-											)}
-											{activeWarehouseId === 1 && (
-												<>
+								<tr>
+									<td
+										colSpan={3}
+										className="text-center py-4"
+									>
+										A raktár üres
+									</td>
+								</tr>
+							) : (
+								activeWarehouseStock.map((stock, i) => {
+									return (
+										<tr key={i}>
+											<td>{stock.product.productName}</td>
+											<td>{stock.productQuantity}</td>
+											<td className="flex gap-1 mx-3">
+												{(activeWarehouseId === 1 ||
+													activeWarehouseId ===
+														3) && (
 													<Button
 														handleClick={() => {
 															setIsTransferOpen(
 																true,
 															);
+															setIsDispatch(true);
 															setProductId(
 																stock.product
 																	.productId,
 															);
-															setToWarehouseId(2);
 														}}
-														buttonIcon={<FaLock />}
-														buttonText={"Zárolás"}
+														buttonIcon={<FaTruck />}
+														buttonText={"Kiadás"}
 													/>
+												)}
+												{activeWarehouseId === 1 && (
+													<>
+														<Button
+															handleClick={() => {
+																setIsTransferOpen(
+																	true,
+																);
+																setProductId(
+																	stock
+																		.product
+																		.productId,
+																);
+																setToWarehouseId(
+																	2,
+																);
+															}}
+															buttonIcon={
+																<FaLock />
+															}
+															buttonText={
+																"Zárolás"
+															}
+														/>
+														<Button
+															handleClick={() => {
+																setIsTransferOpen(
+																	true,
+																);
+																setProductId(
+																	stock
+																		.product
+																		.productId,
+																);
+																setToWarehouseId(
+																	3,
+																);
+															}}
+															buttonIcon={
+																<FaHandPaper />
+															}
+															buttonText={
+																"Foglalás"
+															}
+														/>
+														<Button
+															handleClick={() => {
+																setIsTransferOpen(
+																	true,
+																);
+																setProductId(
+																	stock
+																		.product
+																		.productId,
+																);
+																setToWarehouseId(
+																	4,
+																);
+															}}
+															buttonIcon={
+																<FaTrash />
+															}
+															buttonText={
+																"Selejtezés"
+															}
+														/>
+													</>
+												)}
+												{activeWarehouseId !== 1 && (
 													<Button
 														handleClick={() => {
 															setIsTransferOpen(
@@ -276,53 +330,21 @@ async function handleMove(e) {
 																stock.product
 																	.productId,
 															);
-															setToWarehouseId(3);
+															setToWarehouseId(1);
 														}}
 														buttonIcon={
-															<FaHandPaper />
+															<FaArrowTurnUp />
 														}
-														buttonText={"Foglalás"}
-													/>
-													<Button
-														handleClick={() => {
-															setIsTransferOpen(
-																true,
-															);
-															setProductId(
-																stock.product
-																	.productId,
-															);
-															setToWarehouseId(4);
-														}}
-														buttonIcon={<FaTrash />}
 														buttonText={
-															"Selejtezés"
+															"Állapot Feloldása"
 														}
 													/>
-												</>
-											)}
-											{activeWarehouseId !== 1 && (
-												<Button
-													handleClick={() => {
-														setIsTransferOpen(true);
-														setProductId(
-															stock.product
-																.productId,
-														);
-														setToWarehouseId(1);
-													}}
-													buttonIcon={
-														<FaArrowTurnUp />
-													}
-													buttonText={
-														"Állapot Feloldása"
-													}
-												/>
-											)}
-										</td>
-									</tr>
-								);
-							}))}
+												)}
+											</td>
+										</tr>
+									);
+								})
+							)}
 						</tbody>
 					</table>
 				</div>
@@ -340,7 +362,6 @@ async function handleMove(e) {
 							<label>
 								Termék:
 								<select
-									size={2}
 									value={productId}
 									onChange={(e) =>
 										setProductId(Number(e.target.value))
