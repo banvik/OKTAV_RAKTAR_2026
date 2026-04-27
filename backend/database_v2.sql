@@ -67,11 +67,6 @@ CREATE TABLE `stock` (
 	FOREIGN KEY (warehouse_id) 
 	REFERENCES warehouses(warehouse_id)
 	ON DELETE RESTRICT
-	ON UPDATE CASCADE,
-	CONSTRAINT fk_status
-	FOREIGN KEY (status_id) 
-	REFERENCES statuses(status_id)
-	ON DELETE RESTRICT
 	ON UPDATE CASCADE
 	)
 	ENGINE=InnoDB
