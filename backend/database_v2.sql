@@ -56,7 +56,6 @@ CREATE TABLE `stock` (
 	stock_id INT AUTO_INCREMENT PRIMARY KEY,
 	product_id INT NOT NULL,
 	warehouse_id INT NOT NULL,
-	status_id INT NOT NULL,
 	product_quantity INT DEFAULT 0 CHECK (product_quantity >= 0),
 	CONSTRAINT fk_product
 	FOREIGN KEY (product_id) 
