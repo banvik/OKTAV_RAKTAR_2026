@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { FaTrash, FaEdit } from "react-icons/fa";
+import ConfirmModal from "../components/ConfirmModal";
+import Button from "../components/Button";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState([])
@@ -14,6 +18,9 @@ export default function ProductsPage() {
 	const [search, setSearch] = useState("");
 	const [selectedProduct, setSelectedProduct] = useState(null);
 	const [isViewOpen, setIsViewOpen] = useState(false);
+	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [deleteId, setDeleteId] = useState(null);
+	const [deleteProductName, setDeleteProductName] = useState("")
 
     useEffect(() => {
 		fetch("http://localhost:8080/api/products")
@@ -79,17 +86,39 @@ export default function ProductsPage() {
 			});
 	}
 
-	function handleDelete(id) {
-		fetch(`http://localhost:8080/api/products/${id}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-		.then(() => {
+	async function handleDelete(id) {
+		try {
+			const res = await fetch(
+				`http://localhost:8080/api/products/${id}`,
+				{
+					method: "DELETE",
+				},
+			);
+
+			if (!res.ok) {
+				throw new Error("Sikertelen törlés");
+			}
+
 			setProducts((prev) => prev.filter((p) => p.productId !== id));
-		});
+
+			toast.success("Termék sikeresen törölve");
+		} catch (err) {
+			console.error(err);
+			toast.error("Hiba történt a törlés során");
+		}
 	}
+
+	function handleConfirmDelete() {
+		handleDelete(deleteId);
+		setConfirmOpen(false);
+		setDeleteId(null);
+	}
+
+	function handleCancelDelete() {
+		setConfirmOpen(false);
+		setDeleteId(null);
+	}
+
 	function handleEdit(id) {
 		fetch(`http://localhost:8080/api/products/${id}`)
 			.then((res) => res.json())
@@ -153,12 +182,13 @@ export default function ProductsPage() {
 						<tbody>
 							{filteredProducts.map((product, i) => {
 								return (
-									<tr key={i}
+									<tr
+										key={i}
 										onClick={() => {
 											setSelectedProduct(product);
 											setIsViewOpen(true);
 										}}
-										>
+									>
 										<td>{product.productName}</td>
 										<td>{product.productId}</td>
 										<td>
@@ -168,24 +198,31 @@ export default function ProductsPage() {
 										</td>
 										<td>{product.productSize}</td>
 										<td>{product.productColor}</td>
-										<td>
-											<button
-												onClick={(e) => {
-													e.stopPropagation(),
-													handleEdit(product.productId)
-												}
-												}
-											>
-												Módosítás
-											</button>
-											<button
-												onClick={(e) => {
-													e.stopPropagation();
-													handleDelete(product.productId);
+										<td className="flex items-center gap-1">
+											<Button
+												handleClick={(e) => {
+													(e.stopPropagation(),
+														handleEdit(
+															product.productId,
+														));
 												}}
-											>
-												Törlés
-											</button>
+												buttonIcon={<FaEdit />}
+												buttonText={"Módosítás"}
+											/>
+											<Button
+												handleClick={(e) => {
+													e.stopPropagation();
+													setDeleteId(
+														product.productId,
+													);
+													setDeleteProductName(
+														product.productName,
+													);
+													setConfirmOpen(true);
+												}}
+												buttonIcon={<FaTrash />}
+												buttonText={"Törlés"}
+											/>
 										</td>
 									</tr>
 								);
@@ -307,13 +344,34 @@ export default function ProductsPage() {
 						>
 							<h2 className="text-xl mb-4">Termék részletei</h2>
 
-							<p><strong>Név:</strong> {selectedProduct.productName}</p>
-							<p><strong>Azonosító:</strong> {selectedProduct.productId}</p>
-							<p><strong>Kategória:</strong> {getCategoryName(selectedProduct.categoryId)}</p>
-							<p><strong>Méret:</strong> {selectedProduct.productSize}</p>
-							<p><strong>Szín:</strong> {selectedProduct.productColor}</p>
-							<p><strong>Színkód:</strong> {selectedProduct.productColorCode}</p>
-							<p><strong>Leírás:</strong> {selectedProduct.productInfo}</p>
+							<p>
+								<strong>Név:</strong>{" "}
+								{selectedProduct.productName}
+							</p>
+							<p>
+								<strong>Azonosító:</strong>{" "}
+								{selectedProduct.productId}
+							</p>
+							<p>
+								<strong>Kategória:</strong>{" "}
+								{getCategoryName(selectedProduct.categoryId)}
+							</p>
+							<p>
+								<strong>Méret:</strong>{" "}
+								{selectedProduct.productSize}
+							</p>
+							<p>
+								<strong>Szín:</strong>{" "}
+								{selectedProduct.productColor}
+							</p>
+							<p>
+								<strong>Színkód:</strong>{" "}
+								{selectedProduct.productColorCode}
+							</p>
+							<p>
+								<strong>Leírás:</strong>{" "}
+								{selectedProduct.productInfo}
+							</p>
 
 							<div className="mt-4">
 								<button onClick={handleViewClose}>Bezár</button>
@@ -322,6 +380,13 @@ export default function ProductsPage() {
 					</div>
 				)}
 			</div>
+			<ConfirmModal
+				isOpen={confirmOpen}
+				title="Törlés megerősítése"
+				message={`Biztosan törli ezt a terméket : ${deleteProductName}?`}
+				onConfirm={handleConfirmDelete}
+				onCancel={handleCancelDelete}
+			/>
 		</div>
 	);
 }
