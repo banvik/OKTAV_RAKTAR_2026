@@ -36,6 +36,7 @@ public class UserController {
     @Builder
     public static class LoginResponse {
         private String username;
+        private String fullName;
         private String roleName;
         private String message;
     }
@@ -66,6 +67,7 @@ public class UserController {
         LoginResponse response = LoginResponse.builder()
                 .username(user.getUsername())
                 .roleName(user.getRoleName())
+                .fullName(user.getFullName())
                 .message("Sikeres bejelentkezés!")
                 .build();
         return ResponseEntity.ok(response);

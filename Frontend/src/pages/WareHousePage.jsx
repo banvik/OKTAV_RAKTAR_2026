@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { FaTrash, FaInbox, FaTruck, FaLock, FaHandPaper } from "react-icons/fa";
 import IconButton from "../components/IconButton";
 import { FaArrowTurnUp } from "react-icons/fa6";
+import getRole from "../helpers/getRole";
 
 export default function WarehousePage() {
   const [stocks, setStocks] = useState([]);
@@ -17,6 +18,8 @@ export default function WarehousePage() {
   const [activeWarehouseId, setActiveWarehouseId] = useState(1);
   const [activeWarehouseStock, setActiveWarehouseStock] = useState([]);
   const [toWarehouseId, setToWarehouseId] = useState(0);
+  const role = getRole();
+  sessionStorage.getItem("user")
 
   useEffect(() => {
     fetch("http://localhost:8080/api/stock")
@@ -276,17 +279,19 @@ export default function WarehousePage() {
                             />
                           </>
                         )}
-                        {activeWarehouseId !== 1 && activeWarehouseId !== 4 && (
-                          <IconButton
-                            handleClick={() => {
-                              setIsTransferOpen(true);
-                              setProductId(stock.product.productId);
-                              setToWarehouseId(1);
-                            }}
-                            buttonIcon={<FaArrowTurnUp />}
-                            buttonText={"Feloldás"}
-                          />
-                        )}
+                        {role === "raktárvezető" &&
+                          activeWarehouseId !== 1 &&
+                          activeWarehouseId !== 4 && (
+                            <IconButton
+                              handleClick={() => {
+                                setIsTransferOpen(true);
+                                setProductId(stock.product.productId);
+                                setToWarehouseId(1);
+                              }}
+                              buttonIcon={<FaArrowTurnUp />}
+                              buttonText={"Feloldás"}
+                            />
+                          )}
                         {activeWarehouseId === 4 && (
                           <IconButton
                             handleClick={() => {

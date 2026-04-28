@@ -5,6 +5,7 @@ import BaseLayout from "./components/BaseLayout";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import RequireAuth from "./components/RequireAuth";
+import RequireRole from "./components/RequireRole";
 
 function App() {
 	return (
@@ -20,7 +21,14 @@ function App() {
 					}
 				>
 					<Route index element={<WarehousePage />} />
-					<Route path="products" element={<ProductsPage />} />
+					<Route
+						path="/products"
+						element={
+							<RequireRole role="raktárvezető">
+							<ProductsPage />
+							</RequireRole>
+						}
+					/>
 					<Route path="*" element={<NotFoundPage />} />
 				</Route>
 			</Routes>

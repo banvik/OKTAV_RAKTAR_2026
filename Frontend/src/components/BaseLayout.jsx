@@ -5,17 +5,20 @@ import ConfirmModal from "./ConfirmModal";
 import { FaSignOutAlt } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import getRole from "../helpers/getRole";
 
 export default function BaseLayout() {
 	const [menuOpen, setMenuOpen] = useState(false);	
 	const [confirmOpen, setConfirmOpen] = useState(false);
+    const role = getRole()
 
 	function handleLogout() {
-		localStorage.removeItem("user");
+		sessionStorage.removeItem("user");
 		window.location.href = "/login";
 	};
 
-	const userName = JSON.parse(localStorage.getItem("user")).userName
+	const userName = JSON.parse(sessionStorage.getItem("user")).fullName
+	console.log(JSON.parse(sessionStorage.getItem("user")));
 
 	return (
 		<div className="min-h-screen bg-[#FFFBBD] text-[#153B08] font-[Montserrat,_sans-serif]">
@@ -34,7 +37,9 @@ export default function BaseLayout() {
 					`}
 				>
 					<CustomNavLink to="/">Raktár</CustomNavLink>
+					{role === "raktárvezető" && (
 					<CustomNavLink to="/products">Termékek</CustomNavLink>
+					)}
 				</div>
 				<div className="flex gap-2">
 				<p className="text-center py-2">Üdvözöljük, {userName}!</p>

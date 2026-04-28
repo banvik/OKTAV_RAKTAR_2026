@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
 export default function LoginPage() {
@@ -7,22 +9,47 @@ export default function LoginPage() {
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 
-	const handleLogin = (e) => {
-		e.preventDefault();
+	const handleLogin = async (e) => {
+    e.preventDefault();
 
-		// fake validation (replace with API later)
-		if (userName === "Admin" && password === "OktavJelszo") {
-			localStorage.setItem("user", JSON.stringify({ userName }));
+    try {
+    const response = await fetch("http://localhost:8080/api/users/login", {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+        username: userName,
+        password: password,
+        }),
+    });
 
-			toast.success("Sikeres bejelentkezés!");
-			navigate("/");
-		} else {
-			toast.error("Hibás felhasználónév vagy jelszó!");
-		}
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Sikertelen bejelentkezés");
+    }
+
+    const data = await response.json();
+
+    sessionStorage.setItem(
+        "user",
+        JSON.stringify({
+        fullName: data.fullName,
+        role: data.roleName,
+        }),
+    );
+
+    toast.success(data.message || "Sikeres bejelentkezés!");
+    navigate("/");
+    } catch (error) {
+    console.error(error);
+    toast.error(error.message || "Hibás felhasználónév vagy jelszó!");
+    }
 	};
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-[#FFFBBD] text-[#153B08] font-[Montserrat,_sans-serif]">
+			<ToastContainer />
 			<form
 				onSubmit={handleLogin}
 				className="bg-[#EEEBAB] p-8 rounded-2xl shadow-md w-full max-w-sm flex flex-col gap-4"
