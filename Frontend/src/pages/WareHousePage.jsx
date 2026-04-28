@@ -140,6 +140,7 @@ export default function WarehousePage() {
         setIsTransferOpen(false);
         setIsDispatch(false);
       } catch (error) {
+        setIsDispatch(false);
         console.error(error);
 
         toast.error("Készletmozgatás sikertelen!");
@@ -184,8 +185,8 @@ export default function WarehousePage() {
     }
   }
   return (
-    <div className="flex items-start gap-2">
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col md:flex-row items-start gap-2">
+      <div className="flex md:flex-col gap-2">
         {warehouses.map((warehouse) => (
           <button
             key={warehouse.warehouseId}
@@ -275,7 +276,7 @@ export default function WarehousePage() {
                             />
                           </>
                         )}
-                        {activeWarehouseId !== 1 && (
+                        {activeWarehouseId !== 1 && activeWarehouseId !== 4 && (
                           <IconButton
                             handleClick={() => {
                               setIsTransferOpen(true);
@@ -283,7 +284,18 @@ export default function WarehousePage() {
                               setToWarehouseId(1);
                             }}
                             buttonIcon={<FaArrowTurnUp />}
-                            buttonText={"Állapot Feloldása"}
+                            buttonText={"Feloldás"}
+                          />
+                        )}
+                        {activeWarehouseId === 4 && (
+                          <IconButton
+                            handleClick={() => {
+                              setIsTransferOpen(true);
+                              setIsDispatch(true);
+                              setProductId(stock.product.productId);
+                            }}
+                            buttonIcon={<FaTruck />}
+                            buttonText={"Elszállítás"}
                           />
                         )}
                       </td>

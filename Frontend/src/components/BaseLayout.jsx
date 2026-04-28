@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import CustomNavLink from "./CustomNavLink";
+import { FaSignOutAlt } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,7 +17,7 @@ export default function BaseLayout() {
 
 	return (
 		<div className="min-h-screen bg-[#FFFBBD] text-[#153B08] font-[Montserrat,_sans-serif]">
-			<nav className="flex p-4 text-xl justify-between">
+			<nav className="flex md:p-4 text-xl justify-between">
 				<button
 					className="text-2xl md:hidden"
 					onClick={() => setMenuOpen(!menuOpen)}
@@ -35,10 +36,11 @@ export default function BaseLayout() {
 				</div>
 				<div className="flex gap-2">
 				<p className="text-center py-2">Üdvözöljük, {userName}!</p>
-				<button onClick={handleLogout}>Kijelentkezés</button>
+				<button className="hidden md:block"onClick={handleLogout}>Kijelentkezés</button>
+				<button className="md:hidden"onClick={handleLogout}>{<FaSignOutAlt/>}</button>
 				</div>
 			</nav>
-			<main className="p-5">
+			<main className="md:p-4">
 				<ToastContainer />
 				<Outlet />
 			</main>

@@ -171,10 +171,10 @@ export default function ProductsPage() {
             <thead className="sticky top-0 bg-[#EEEBAB]">
               <tr>
                 <th>Terméknév</th>
-                <th>Azonosító kód</th>
+                <th className="hidden sm:table-cell">Azonosító kód</th>
                 <th>Kategória</th>
-                <th>Méret</th>
-                <th>Szín</th>
+                <th className="hidden sm:table-cell">Méret</th>
+                <th className="hidden sm:table-cell">Szín</th>
                 <th>Műveletek</th>
               </tr>
             </thead>
@@ -189,10 +189,17 @@ export default function ProductsPage() {
                     }}
                   >
                     <td>{product.productName}</td>
-                    <td>{product.productId}</td>
+                    <td className="hidden sm:table-cell">
+                      {product.productId}
+                    </td>
                     <td>{getCategoryName(product.categoryId)}</td>
-                    <td>{product.productSize} {getCategoryUnit(product.categoryId)}</td>
-                    <td>{product.productColor}</td>
+                    <td className="hidden sm:table-cell">
+                      {product.productSize}{" "}
+                      {getCategoryUnit(product.categoryId)}
+                    </td>
+                    <td className="hidden sm:table-cell">
+                      {product.productColor}
+                    </td>
                     <td className="flex items-center gap-1">
                       <IconButton
                         handleClick={(e) => {
