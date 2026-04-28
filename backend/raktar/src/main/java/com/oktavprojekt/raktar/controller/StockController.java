@@ -21,19 +21,21 @@ public class StockController {
     @Autowired
     private StockRepository repository;
 
-    public static class IncomingRequest { // Bevételezés segédosztálya
+// ----  DTO segédosztályok  ----
+
+    public static class IncomingRequest { // Bevételezés osztálya
         public Integer productId;
         public Integer quantity;
     }
     
-    public static class TransferRequest { // Raktárközi árumozgás segédosztálya
+    public static class TransferRequest { // Raktárközi árumozgás osztálya
         public Integer productId;
         public Integer fromWarehouseId;
         public Integer toWarehouseId;
         public Integer quantity;
     }
 
-    public static class OutgoingRequest { // Kiadás segédosztálya
+    public static class OutgoingRequest { // Kiadás osztálya
         public Integer productId;
         public Integer warehouseId;
         public Integer quantity;

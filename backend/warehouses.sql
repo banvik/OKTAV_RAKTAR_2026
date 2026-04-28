@@ -6,5 +6,3 @@ INSERT INTO `warehouses` (`warehouse_name`) VALUES
 ('foglalási raktár'),
 ('zárolt raktár'),
 ('selejt raktár');
-
-

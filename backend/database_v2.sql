@@ -56,7 +56,6 @@ CREATE TABLE `stock` (
 	stock_id INT AUTO_INCREMENT PRIMARY KEY,
 	product_id INT NOT NULL,
 	warehouse_id INT NOT NULL,
-	status_id INT NOT NULL,
 	product_quantity INT DEFAULT 0 CHECK (product_quantity >= 0),
 	CONSTRAINT fk_product
 	FOREIGN KEY (product_id) 
@@ -66,11 +65,6 @@ CREATE TABLE `stock` (
 	CONSTRAINT fk_warehouse
 	FOREIGN KEY (warehouse_id) 
 	REFERENCES warehouses(warehouse_id)
-	ON DELETE RESTRICT
-	ON UPDATE CASCADE,
-	CONSTRAINT fk_status
-	FOREIGN KEY (status_id) 
-	REFERENCES statuses(status_id)
 	ON DELETE RESTRICT
 	ON UPDATE CASCADE
 	)
