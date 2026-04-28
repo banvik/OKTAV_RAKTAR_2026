@@ -185,8 +185,8 @@ export default function WarehousePage() {
     }
   }
   return (
-    <div className="flex flex-col md:flex-row items-start gap-2">
-      <div className="flex md:flex-col gap-2">
+    <div className="flex flex-col md:flex-row gap-2">
+      <div className="flex pl-1 md:flex-col gap-2">
         {warehouses.map((warehouse) => (
           <button
             key={warehouse.warehouseId}
@@ -232,7 +232,7 @@ export default function WarehousePage() {
                     <tr key={i}>
                       <td>{stock.product.productName}</td>
                       <td>{stock.productQuantity}</td>
-                      <td className="flex gap-1 mx-3">
+                      <td className="grid grid-cols-2 md:flex gap-1 mx-3 ">
                         {(activeWarehouseId === 1 ||
                           activeWarehouseId === 3) && (
                           <IconButton

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 import ConfirmModal from "../components/ConfirmModal";
 import IconButton from "../components/IconButton";
 
@@ -162,8 +162,15 @@ export default function ProductsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button onClick={() => setIsOpen(true)} className="btn btn-primary">
-            Új tárgy felvétele
+          <button
+            className="flex"
+            onClick={() => setIsOpen(true)}
+            className="btn btn-primary"
+          >
+            <span className="sm:hidden">
+              <FaPlus />
+            </span>
+            <span className="hidden sm:inline">Új tárgy felvétele</span>
           </button>
         </div>
         <div className="table-wrapper max-h-96 overflow-y-auto ">
