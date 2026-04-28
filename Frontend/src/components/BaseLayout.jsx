@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import CustomNavLink from "./CustomNavLink";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -29,9 +30,8 @@ export default function BaseLayout() {
 						${menuOpen ? "flex flex-col absolute top-14 left-4 bg-[#EEEBAB] p-4 rounded-xl shadow" : "hidden md:flex"}
 					`}
 				>
-					<Link to="/">Termékek</Link>
-					<Link to="/warehouses">Raktár</Link>
-					<Link to="/transactions">Tranzakciók</Link>
+					<CustomNavLink to="/">Raktár</CustomNavLink>
+					<CustomNavLink to="/products">Termékek</CustomNavLink>
 				</div>
 				<div className="flex gap-2">
 				<p className="text-center py-2">Üdvözöljük, {userName}!</p>

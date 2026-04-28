@@ -1,4 +1,4 @@
-export default function Button({handleClick, buttonIcon, buttonText}){
+export default function IconButton({handleClick, buttonIcon, buttonText}){
     return (
 		<div className="relative group inline-flex justify-center">
 			<button
