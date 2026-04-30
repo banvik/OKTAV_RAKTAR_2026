@@ -237,7 +237,7 @@ export default function WarehousePage() {
                       <td>{stock.productQuantity}</td>
                       <td className="grid grid-cols-2 md:flex gap-1 mx-3 ">
                         {(activeWarehouseId === 1 ||
-                          activeWarehouseId === 3) && (
+                          activeWarehouseId === 2) && (
                           <IconButton
                             handleClick={() => {
                               setIsTransferOpen(true);
@@ -248,7 +248,7 @@ export default function WarehousePage() {
                             buttonText={"Kiadás"}
                           />
                         )}
-                        {activeWarehouseId === 1 && (
+                        {activeWarehouseId === 1 || activeWarehouseId === 3 && (
                           <>
                             <IconButton
                               handleClick={() => {
