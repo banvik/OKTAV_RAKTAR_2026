@@ -267,15 +267,6 @@ export default function WarehousePage() {
                               buttonIcon={<FaHandPaper />}
                               buttonText={"Foglalás"}
                             />
-                            <IconButton
-                              handleClick={() => {
-                                setIsTransferOpen(true);
-                                setProductId(stock.product.productId);
-                                setToWarehouseId(4);
-                              }}
-                              buttonIcon={<FaTrash />}
-                              buttonText={"Selejtezés"}
-                            />
                           </>
                         )}
                         {(activeWarehouseId === 1 ||
