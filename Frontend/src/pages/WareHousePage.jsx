@@ -183,7 +183,7 @@ export default function WarehousePage() {
       } catch (error) {
         console.error(error);
 
-        toast.error(error.message || "Készletmozgatás sikertelen!");
+        toast.error("Készletmozgatás sikertelen!");
       }
     }
   }
@@ -207,8 +207,7 @@ export default function WarehousePage() {
                 warehouses.find(
                   (warehouse) => warehouse.warehouseId === activeWarehouseId,
                 )?.warehouseName
-              }{" "}
-              Raktár
+              }
             </h1>
             {activeWarehouseId === 1 && (
               <button onClick={() => setIsOpen(true)}>Bevételezés</button>
@@ -248,7 +247,7 @@ export default function WarehousePage() {
                             buttonText={"Kiadás"}
                           />
                         )}
-                        {activeWarehouseId === 1 || activeWarehouseId === 3 && (
+                        {activeWarehouseId === 1 && (
                           <>
                             <IconButton
                               handleClick={() => {
@@ -279,6 +278,18 @@ export default function WarehousePage() {
                             />
                           </>
                         )}
+                        {(activeWarehouseId === 1 ||
+                          activeWarehouseId === 3) && (
+                            <IconButton
+                              handleClick={() => {
+                                setIsTransferOpen(true);
+                                setProductId(stock.product.productId);
+                                setToWarehouseId(4);
+                              }}
+                              buttonIcon={<FaTrash />}
+                              buttonText={"Selejtezés"}
+                            />
+                          )}
                         {role === "raktárvezető" &&
                           activeWarehouseId !== 1 &&
                           activeWarehouseId !== 4 && (

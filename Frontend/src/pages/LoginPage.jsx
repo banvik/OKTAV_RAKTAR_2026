@@ -43,7 +43,7 @@ export default function LoginPage() {
     navigate("/");
     } catch (error) {
     console.error(error);
-    toast.error(error.message || "Hibás felhasználónév vagy jelszó!");
+    toast.error("Hibás felhasználónév vagy jelszó!");
     }
 	};
 
