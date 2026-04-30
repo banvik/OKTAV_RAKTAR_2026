@@ -15,8 +15,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "warehouses") // Megegyezik az adatbázisbeli táblanévvel.
 @NoArgsConstructor // Kell a JPA-nak egy üres konstruktor.
-@AllArgsConstructor // Jó a teszteléshez.
-@Data
+@AllArgsConstructor // Kényelmes konstruktor minden mezővel.
+@Data   // Lombok annotáció, ami automatikusan generál gettereket, settereket, equals-t, hashCode-t és toString-et.
 @Getter
 @Setter
 public class Warehouse {

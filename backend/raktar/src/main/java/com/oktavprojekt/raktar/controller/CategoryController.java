@@ -23,6 +23,6 @@ public class CategoryController {
     @GetMapping("/categories")
     public List<Category> getAll() {
 
-        return repository.findAll(); // Spring automatically converts to JSON
+        return repository.findAll(); // Spring automatikusan convertál JSON formátumra, ha visszaadunk egy List<Category>-t.
     }
 }

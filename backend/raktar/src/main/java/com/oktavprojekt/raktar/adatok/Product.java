@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "products") // Megegyezik az adatbázisbeli táblanévvel.
 @NoArgsConstructor // Kell a JPA-nak egy üres konstruktor.
-@AllArgsConstructor // Jó a teszteléshez.
-@Data
+@AllArgsConstructor // Kényelmes konstruktor minden mezővel.
+@Data   // Lombok annotáció, ami automatikusan generál gettereket, settereket, equals-t, hashCode-t és toString-et.
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    @com.fasterxml.jackson.annotation.JsonProperty("productId")
+    @com.fasterxml.jackson.annotation.JsonProperty("productId") 
     private Integer productId;
 
     @Column(name = "product_name")
@@ -39,12 +39,9 @@ public class Product {
 
     @Column(name = "product_info")
     private String productInfo;
-
-    // --- KAPCSOLAT ---
-    // Ide jön a @OneToMany, ami a Stock osztályra mutat.
-    // A mappedBy értéke az a változónév legyen, ami a Stock osztályban van!
-    @OneToMany(mappedBy = "product") 
-    @JsonIgnore // Így a termék lekérésekor nem küldi el az összes raktárbejegyzést
+    
+    @OneToMany(mappedBy = "product") // A mappedBy értéke az a változónév legyen, ami a Stock osztályban van!
+    @JsonIgnore // Így a termék lekérésekor nem küldi el az összes raktárbejegyzést, nem lesz végtelen ciklus a JSON-ban.
     private List<Stock> stocks;
    
 }

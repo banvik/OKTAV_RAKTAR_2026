@@ -22,7 +22,7 @@ public class ProductController {
     @GetMapping("/products")
     public List<Product> getAll() {
 
-        return repository.findAll(); // A Spring Boot automatikusan átalakítja JSON-ná!
+        return repository.findAll(); // Spring automatikusan convertál JSON formátumra, ha visszaadunk egy List<Category>-t.
     }
 
     @GetMapping("/products/{id}")
@@ -36,7 +36,7 @@ public class ProductController {
     public ResponseEntity<Product> addProduct(@RequestBody Product newProduct) {
 
         Product savedProduct = repository.save(newProduct); // A save() metódus elmenti az adatbázisba és visszaadja a már ID-val rendelkező objektumot
-        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED); // 201-es kóddal válaszolunk
+        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
     @PutMapping("/products/{id}")

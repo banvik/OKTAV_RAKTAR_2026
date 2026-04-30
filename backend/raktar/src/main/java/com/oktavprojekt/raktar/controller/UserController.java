@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping("/users")
     public List<User> getAll() {
 
-        return repository.findAll(); // Spring automatically converts to JSON
+        return repository.findAll(); // Spring automatikusan convertál JSON formátumra, ha visszaadunk egy List<Category>-t.
     }
 
     @PostMapping("/users/login")

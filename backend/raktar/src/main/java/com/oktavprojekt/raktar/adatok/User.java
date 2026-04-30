@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users") // Megegyezik az adatbázisbeli táblanévvel.
 @Data
 @NoArgsConstructor // Kell a JPA-nak egy üres konstruktor.
-@AllArgsConstructor // Jó a teszteléshez.
+@AllArgsConstructor // Kényelmes konstruktor minden mezővel.
 public class User {
 
     @Id

@@ -59,7 +59,7 @@ public class StockController {
     @GetMapping("/stock")
     public List<Stock> getAll() {
 
-        return repository.findAll(); // A Spring Boot automatikusan átalakítja JSON-ná!
+        return repository.findAll(); // Spring automatikusan convertál JSON formátumra, ha visszaadunk egy List<Category>-t.
     }
 
     @GetMapping("/stock/{id}")
@@ -202,11 +202,8 @@ public class StockController {
                 : stock);
     }
 
-
-    // ----  UPDATE  műveletek  ----
-
     @PutMapping("/stock/{id}")
-        //{ "productQuantity": 500, "warehouseId": 2 }
+        //{ "productQuantity": 1, "warehouseId": 2 }
     public ResponseEntity<?> updateStock(@PathVariable Integer id, @RequestBody Stock stockDetails) {
 
         Optional<Stock> stockData = repository.findById(id);
