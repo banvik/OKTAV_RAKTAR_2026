@@ -200,7 +200,7 @@ export default function WarehousePage() {
         ))}
       </div>
       <div className="flex flex-1 justify-center">
-        <div className="table-wrapper max-h-96 ">
+        <div>
           <div className="flex justify-between mb-2">
             <h1 className="text-2xl">
               {
@@ -213,105 +213,107 @@ export default function WarehousePage() {
               <button onClick={() => setIsOpen(true)}>Bevételezés</button>
             )}
           </div>
-          <table className="overflow-y-auto ">
-            <thead className="sticky top-0 bg-[#EEEBAB]">
-              <tr>
-                <th>Terméknév</th>
-                <th>Mennyiség</th>
-                <th>Műveletek</th>
-              </tr>
-            </thead>
-            <tbody>
-              {activeWarehouseStock.length === 0 ? (
+          <div className="table-wrapper max-h-96 overflow-y-auto">
+            <table>
+              <thead className="sticky top-0 bg-[#EEEBAB]">
                 <tr>
-                  <td colSpan={3} className="text-center py-4">
-                    A raktár üres
-                  </td>
+                  <th>Terméknév</th>
+                  <th>Mennyiség</th>
+                  <th>Műveletek</th>
                 </tr>
-              ) : (
-                activeWarehouseStock.map((stock, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>{stock.product.productName}</td>
-                      <td>{stock.productQuantity}</td>
-                      <td className="grid grid-cols-2 md:flex gap-1 mx-3 ">
-                        {(activeWarehouseId === 1 ||
-                          activeWarehouseId === 2) && (
-                          <IconButton
-                            handleClick={() => {
-                              setIsTransferOpen(true);
-                              setIsDispatch(true);
-                              setProductId(stock.product.productId);
-                            }}
-                            buttonIcon={<FaTruck />}
-                            buttonText={"Kiadás"}
-                          />
-                        )}
-                        {activeWarehouseId === 1 && (
-                          <>
+              </thead>
+              <tbody>
+                {activeWarehouseStock.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="text-center py-4">
+                      A raktár üres
+                    </td>
+                  </tr>
+                ) : (
+                  activeWarehouseStock.map((stock, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{stock.product.productName}</td>
+                        <td>{stock.productQuantity}</td>
+                        <td className="grid grid-cols-2 md:flex gap-1 mx-3 ">
+                          {(activeWarehouseId === 1 ||
+                            activeWarehouseId === 2) && (
                             <IconButton
                               handleClick={() => {
                                 setIsTransferOpen(true);
+                                setIsDispatch(true);
                                 setProductId(stock.product.productId);
-                                setToWarehouseId(2);
                               }}
-                              buttonIcon={<FaLock />}
-                              buttonText={"Zárolás"}
-                            />
-                            <IconButton
-                              handleClick={() => {
-                                setIsTransferOpen(true);
-                                setProductId(stock.product.productId);
-                                setToWarehouseId(3);
-                              }}
-                              buttonIcon={<FaHandPaper />}
-                              buttonText={"Foglalás"}
-                            />
-                          </>
-                        )}
-                        {(activeWarehouseId === 1 ||
-                          activeWarehouseId === 3) && (
-                          <IconButton
-                            handleClick={() => {
-                              setIsTransferOpen(true);
-                              setProductId(stock.product.productId);
-                              setToWarehouseId(4);
-                            }}
-                            buttonIcon={<FaTrash />}
-                            buttonText={"Selejtezés"}
-                          />
-                        )}
-                        {role === "raktárvezető" &&
-                          activeWarehouseId !== 1 &&
-                          activeWarehouseId !== 4 && (
-                            <IconButton
-                              handleClick={() => {
-                                setIsTransferOpen(true);
-                                setProductId(stock.product.productId);
-                                setToWarehouseId(1);
-                              }}
-                              buttonIcon={<FaArrowTurnUp />}
-                              buttonText={"Feloldás"}
+                              buttonIcon={<FaTruck />}
+                              buttonText={"Kiadás"}
                             />
                           )}
-                        {activeWarehouseId === 4 && (
-                          <IconButton
-                            handleClick={() => {
-                              setIsTransferOpen(true);
-                              setIsDispatch(true);
-                              setProductId(stock.product.productId);
-                            }}
-                            buttonIcon={<FaTruck />}
-                            buttonText={"Elszállítás"}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                          {activeWarehouseId === 1 && (
+                            <>
+                              <IconButton
+                                handleClick={() => {
+                                  setIsTransferOpen(true);
+                                  setProductId(stock.product.productId);
+                                  setToWarehouseId(2);
+                                }}
+                                buttonIcon={<FaLock />}
+                                buttonText={"Zárolás"}
+                              />
+                              <IconButton
+                                handleClick={() => {
+                                  setIsTransferOpen(true);
+                                  setProductId(stock.product.productId);
+                                  setToWarehouseId(3);
+                                }}
+                                buttonIcon={<FaHandPaper />}
+                                buttonText={"Foglalás"}
+                              />
+                            </>
+                          )}
+                          {(activeWarehouseId === 1 ||
+                            activeWarehouseId === 3) && (
+                            <IconButton
+                              handleClick={() => {
+                                setIsTransferOpen(true);
+                                setProductId(stock.product.productId);
+                                setToWarehouseId(4);
+                              }}
+                              buttonIcon={<FaTrash />}
+                              buttonText={"Selejtezés"}
+                            />
+                          )}
+                          {role === "raktárvezető" &&
+                            activeWarehouseId !== 1 &&
+                            activeWarehouseId !== 4 && (
+                              <IconButton
+                                handleClick={() => {
+                                  setIsTransferOpen(true);
+                                  setProductId(stock.product.productId);
+                                  setToWarehouseId(1);
+                                }}
+                                buttonIcon={<FaArrowTurnUp />}
+                                buttonText={"Feloldás"}
+                              />
+                            )}
+                          {activeWarehouseId === 4 && (
+                            <IconButton
+                              handleClick={() => {
+                                setIsTransferOpen(true);
+                                setIsDispatch(true);
+                                setProductId(stock.product.productId);
+                              }}
+                              buttonIcon={<FaTruck />}
+                              buttonText={"Elszállítás"}
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       {isOpen && (
