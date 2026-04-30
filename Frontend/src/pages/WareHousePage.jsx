@@ -215,7 +215,7 @@ export default function WarehousePage() {
           </div>
           <div className="table-wrapper max-h-96 overflow-y-auto">
             <table>
-              <thead className="sticky top-0 bg-[#EEEBAB]">
+              <thead className="sticky top-0 bg-[#EEEBAB] z-1000">
                 <tr>
                   <th>Terméknév</th>
                   <th>Mennyiség</th>
