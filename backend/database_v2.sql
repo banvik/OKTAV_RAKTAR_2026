@@ -80,7 +80,7 @@ CREATE TABLE `users` (
 	full_name VARCHAR(50) NOT NULL,
 	username VARCHAR(50) NOT NULL UNIQUE,
 	password_hash VARCHAR(255) NOT NULL,
-	role_name ENUM('admin', 'raktáros', 'raktárvezető', 'beszerző') DEFAULT 'raktáros'
+	role_name ENUM('admin', 'raktáros', 'raktárvezető') DEFAULT 'raktáros'
 	)
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4
@@ -94,7 +94,7 @@ CREATE TABLE `operations` (
 	stock_id INT NOT NULL,
 	user_id INT NOT NULL,
 	operation_quantity INT NOT NULL,
-	operation__info VARCHAR(100) NOT NULL,
+	operation_info VARCHAR(100) NOT NULL,
 	operation_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT fk_stock
 	FOREIGN KEY (stock_id) 
