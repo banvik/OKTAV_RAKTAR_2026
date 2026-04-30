@@ -200,20 +200,20 @@ export default function WarehousePage() {
         ))}
       </div>
       <div className="flex flex-1 justify-center">
-        <div className="flex justify-between mb-2">
-          <h1 className="text-2xl">
-            {
-              warehouses.find(
-                (warehouse) => warehouse.warehouseId === activeWarehouseId,
-              )?.warehouseName
-            }
-          </h1>
-          {activeWarehouseId === 1 && (
-            <button onClick={() => setIsOpen(true)}>Bevételezés</button>
-          )}
-        </div>
-        <div className="table-wrapper max-h-96 overflow-y-auto ">
-          <table>
+        <div className="table-wrapper max-h-96 ">
+          <div className="flex justify-between mb-2">
+            <h1 className="text-2xl">
+              {
+                warehouses.find(
+                  (warehouse) => warehouse.warehouseId === activeWarehouseId,
+                )?.warehouseName
+              }
+            </h1>
+            {activeWarehouseId === 1 && (
+              <button onClick={() => setIsOpen(true)}>Bevételezés</button>
+            )}
+          </div>
+          <table className="overflow-y-auto ">
             <thead className="sticky top-0 bg-[#EEEBAB]">
               <tr>
                 <th>Terméknév</th>
