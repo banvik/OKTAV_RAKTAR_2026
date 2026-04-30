@@ -254,7 +254,7 @@ export default function WarehousePage() {
                                 handleClick={() => {
                                   setIsTransferOpen(true);
                                   setProductId(stock.product.productId);
-                                  setToWarehouseId(2);
+                                  setToWarehouseId(3);
                                 }}
                                 buttonIcon={<FaLock />}
                                 buttonText={"Zárolás"}
@@ -263,7 +263,7 @@ export default function WarehousePage() {
                                 handleClick={() => {
                                   setIsTransferOpen(true);
                                   setProductId(stock.product.productId);
-                                  setToWarehouseId(3);
+                                  setToWarehouseId(2);
                                 }}
                                 buttonIcon={<FaHandPaper />}
                                 buttonText={"Foglalás"}
