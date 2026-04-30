@@ -41,6 +41,14 @@ public class StockController {
         public Integer quantity;
     }
 
+    private void handleZeroStock(Stock stock) {
+        if (stock.getProductQuantity() <= 0) {
+            repository.delete(stock);
+        } else {
+            repository.save(stock);
+        }
+    }
+
     @GetMapping("/test")
     public String test() {
         return "A szerver fut és látja a kontrollert!";
@@ -154,7 +162,7 @@ public class StockController {
         targetStock.setProductQuantity(targetStock.getProductQuantity() + request.quantity);
 
         // 5. Mentés
-        repository.save(sourceStock);
+        handleZeroStock(sourceStock);
         repository.save(targetStock);
 
         return ResponseEntity.ok("Sikeres átmozgatás!");
@@ -188,13 +196,11 @@ public class StockController {
         );
 
         // 4. Mentés
-        repository.save(stock);
-
-        return ResponseEntity.ok(stock);
+        handleZeroStock(stock);
+        return ResponseEntity.ok(stock.getProductQuantity() <= 0
+                ? "A készlet elfogyott és törölve lett."
+                : stock);
     }
-
-    // ----  CREATE  műveletek  ----
-
 
 
     // ----  UPDATE  műveletek  ----

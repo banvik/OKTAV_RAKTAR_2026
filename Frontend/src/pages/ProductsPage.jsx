@@ -39,11 +39,6 @@ export default function ProductsPage() {
     return cat ? cat.categoryName : "Unknown";
   };
 
-  const getCategoryUnit= (id) => {
-    const cat = categories.find((c) => c.categoryId === id);
-    return cat ? cat.categoryUnit : "";
-  };
-
   const filteredProducts = products.filter(
     (product) =>
       product.productName.toLowerCase().includes(search.toLowerCase()) ||
@@ -106,7 +101,7 @@ export default function ProductsPage() {
       toast.success("Termék sikeresen törölve");
     } catch (err) {
       console.error(err);
-      toast.error("Hiba történt a törlés során");
+      toast.error("A terméket nem lehet kitörölni");
     }
   }
 
@@ -201,8 +196,7 @@ export default function ProductsPage() {
                     </td>
                     <td>{getCategoryName(product.categoryId)}</td>
                     <td className="hidden sm:table-cell">
-                      {product.productSize}{" "}
-                      {getCategoryUnit(product.categoryId)}
+                      {product.productSize}
                     </td>
                     <td className="hidden sm:table-cell">
                       {product.productColor}
