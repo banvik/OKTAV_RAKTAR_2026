@@ -200,19 +200,19 @@ export default function WarehousePage() {
         ))}
       </div>
       <div className="flex flex-1 justify-center">
+        <div className="flex justify-between mb-2">
+          <h1 className="text-2xl">
+            {
+              warehouses.find(
+                (warehouse) => warehouse.warehouseId === activeWarehouseId,
+              )?.warehouseName
+            }
+          </h1>
+          {activeWarehouseId === 1 && (
+            <button onClick={() => setIsOpen(true)}>Bevételezés</button>
+          )}
+        </div>
         <div className="table-wrapper max-h-96 overflow-y-auto ">
-          <div className="flex justify-between mb-2">
-            <h1 className="text-2xl">
-              {
-                warehouses.find(
-                  (warehouse) => warehouse.warehouseId === activeWarehouseId,
-                )?.warehouseName
-              }
-            </h1>
-            {activeWarehouseId === 1 && (
-              <button onClick={() => setIsOpen(true)}>Bevételezés</button>
-            )}
-          </div>
           <table>
             <thead className="sticky top-0 bg-[#EEEBAB]">
               <tr>
@@ -271,16 +271,16 @@ export default function WarehousePage() {
                         )}
                         {(activeWarehouseId === 1 ||
                           activeWarehouseId === 3) && (
-                            <IconButton
-                              handleClick={() => {
-                                setIsTransferOpen(true);
-                                setProductId(stock.product.productId);
-                                setToWarehouseId(4);
-                              }}
-                              buttonIcon={<FaTrash />}
-                              buttonText={"Selejtezés"}
-                            />
-                          )}
+                          <IconButton
+                            handleClick={() => {
+                              setIsTransferOpen(true);
+                              setProductId(stock.product.productId);
+                              setToWarehouseId(4);
+                            }}
+                            buttonIcon={<FaTrash />}
+                            buttonText={"Selejtezés"}
+                          />
+                        )}
                         {role === "raktárvezető" &&
                           activeWarehouseId !== 1 &&
                           activeWarehouseId !== 4 && (
